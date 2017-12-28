@@ -230,7 +230,12 @@ public class OkHttpImpl implements IHttp {
                         @Override
                         public void run() {
                             entityCallback.onOk(content);
-                            entityCallback.onEntity(mGson.fromJson(content, cls));
+                            try {
+                                Object obj = mGson.fromJson(content, cls);
+                                entityCallback.onEntity(obj);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 } else if (callback instanceof Request.StringCallBack) {
