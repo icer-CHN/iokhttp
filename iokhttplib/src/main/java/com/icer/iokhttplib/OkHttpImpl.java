@@ -3,9 +3,9 @@ package com.icer.iokhttplib;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -404,19 +404,19 @@ public class OkHttpImpl implements IHttp {
 
     private void d(String msg, String tag) {
         if (HttpMgr.isDebug()) {
-            Logger.log(Logger.DEBUG, tag, msg, null);
+            Log.d(tag, msg);
         }
     }
 
     private void i(String msg, String tag) {
         if (HttpMgr.isDebug()) {
-            Logger.log(Logger.INFO, tag, msg, null);
+            Log.i(tag, msg);
         }
     }
 
     private void w(String msg, String tag) {
         if (HttpMgr.isDebug()) {
-            Logger.log(Logger.WARN, tag, msg, null);
+            Log.w(tag, msg);
         }
     }
 }
