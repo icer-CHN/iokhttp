@@ -214,14 +214,14 @@ public class OkHttpImpl implements IHttp {
         }
     }
 
-    private void proxyResponse(Request request, Response response) {
+    private void proxyResponse(final Request request, Response response) {
         i("proxyResponse()-->" + response.toString(), TAG);
         if (needProxy(request)) {
             try {
                 final String content = response.body().string();
                 i("proxyResponse()-->" + content, TAG);
 
-                Request.Callback callback = request.getCallback();
+                final Request.Callback callback = request.getCallback();
 
                 if (callback instanceof Request.EntityCallback) {
                     final Request.EntityCallback entityCallback = (Request.EntityCallback) callback;
@@ -235,6 +235,7 @@ public class OkHttpImpl implements IHttp {
                                 entityCallback.onEntity(obj);
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                callback.onError(request, e);
                             }
                         }
                     });
