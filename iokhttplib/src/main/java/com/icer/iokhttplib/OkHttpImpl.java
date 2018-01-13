@@ -237,7 +237,6 @@ public class OkHttpImpl implements IHttp {
                                 entityCallback.onEntity(obj);
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                callback.onError(request, e);
                             }
                         }
                     });

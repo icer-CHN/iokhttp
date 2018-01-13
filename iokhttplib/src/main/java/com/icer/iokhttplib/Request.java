@@ -258,13 +258,30 @@ public class Request {
         void onProgress(long now, long total, boolean done);
     }
 
-    public interface EntityCallback<T> extends Callback<String> {
-        Class<T> getEntity();
+    public static abstract class EntityCallback<T> extends StringCallBack {
+        private Class<T> mClass;
 
-        void onEntity(T entity);
+        public EntityCallback(Class<T> clazz) {
+            mClass = clazz;
+        }
+
+        public final Class<T> getEntity() {
+            return mClass;
+        }
+
+        public abstract void onEntity(T entity);
     }
 
-    public interface StringCallBack extends Callback<String> {
+    public static abstract class StringCallBack implements Callback<String> {
+        @Override
+        public void onOk(String content) {
+
+        }
+
+        @Override
+        public void onError(Request request, Exception e) {
+
+        }
     }
 
     /**
