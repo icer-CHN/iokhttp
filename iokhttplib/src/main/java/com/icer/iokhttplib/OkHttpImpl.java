@@ -13,6 +13,7 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -171,6 +172,7 @@ public class OkHttpImpl implements IHttp {
             }
         } else {//上传文件post
             MultipartBody.Builder builder = new MultipartBody.Builder();
+            builder.setType(MultipartBody.FORM);
             Map<String, Object> body = request.getBody();
             Set<String> keySet = body.keySet();
             for (String key : keySet) {
@@ -276,7 +278,7 @@ public class OkHttpImpl implements IHttp {
      * @return
      */
     private boolean needProxy(Request request) {
-        return !(CALL_MAP.get(request) == null || CALL_MAP.get(request).isCanceled()) && REQUEST_LIST.contains(request);
+        return CALL_MAP.get(request) != null && !CALL_MAP.get(request).isCanceled() && REQUEST_LIST.contains(request);
     }
 
     /**
@@ -329,15 +331,18 @@ public class OkHttpImpl implements IHttp {
         i("cancelTag()-->tag: " + tag.toString() + " START", TAG);
         synchronized (REQUEST_LIST) {
             synchronized (CALL_MAP) {
-                Set<Request> keySet = CALL_MAP.keySet();
-                for (Request request : keySet) {
+                Iterator<Request> iterator = CALL_MAP.keySet().iterator();
+                while (iterator.hasNext()) {
+                    Request request = iterator.next();
                     if (tag.equals(request.getTag())) {
                         Call call = CALL_MAP.get(request);
                         call.cancel();
                         CALL_MAP.remove(request);
                         REQUEST_LIST.remove(request);
                         cleanResponseProgress(request);
-                        d("cancelTag()-->tag: " + tag.toString() + " FOUND request: " + request.toString(), TAG);
+                        i(TAG, "cancelTag()-->tag: " + tag.toString() + " FOUND request: " + request.toString());
+                        //更新当前Iterator，防止ConcurrentModificationException
+                        iterator = CALL_MAP.keySet().iterator();
                     }
                 }
             }
@@ -350,14 +355,17 @@ public class OkHttpImpl implements IHttp {
         i("cancelAll()-->START", TAG);
         synchronized (REQUEST_LIST) {
             synchronized (CALL_MAP) {
-                Set<Request> keySet = CALL_MAP.keySet();
-                for (Request request : keySet) {
+                Iterator<Request> iterator = CALL_MAP.keySet().iterator();
+                while (iterator.hasNext()) {
+                    Request request = iterator.next();
                     Call call = CALL_MAP.get(request);
                     call.cancel();
                     CALL_MAP.remove(request);
                     REQUEST_LIST.remove(request);
                     cleanResponseProgress(request);
-                    d("cancelAll()-->" + request.toString(), TAG);
+                    i(TAG, "cancelAll()-->" + request.toString());
+                    //更新当前Iterator，防止ConcurrentModificationException
+                    iterator = CALL_MAP.keySet().iterator();
                 }
             }
         }
