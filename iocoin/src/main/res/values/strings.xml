@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ioCoin</string>
+    <string name="cny">￥</string>
+    <string name="usd">$</string>
+</resources>
