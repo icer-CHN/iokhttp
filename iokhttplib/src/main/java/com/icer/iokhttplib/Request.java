@@ -78,7 +78,7 @@ public class Request {
     public String toString() {
         return "Request{" +
                 "FormData=" + mFormData +
-                ", Method='" + mMethod + '\'' +
+//                ", Method='" + mMethod + '\'' +
                 ", Url='" + mUrl + '\'' +
                 ", Header=" + mHeader +
                 ", Body=" + mBody +

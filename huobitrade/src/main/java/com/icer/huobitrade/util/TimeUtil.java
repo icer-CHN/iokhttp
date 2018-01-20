@@ -26,12 +26,12 @@ public class TimeUtil {
         return utcMillis;
     }
 
-    public static final String PATTERN_TIMESTAMP = "yyyy-MM-dd HH:mm:ss";
+    public static final String PATTERN_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ss";
 
     public static String getUTCTimestamp() {
         long millis = getUTCMillis();
         SimpleDateFormat sdf = new SimpleDateFormat(PATTERN_TIMESTAMP);
-        String timestamp = sdf.format(new Date(millis)).replace(" ", "T");
+        String timestamp = sdf.format(new Date(millis));
         Log.i("UTC_TIMESTAMP", timestamp);
         return timestamp;
     }

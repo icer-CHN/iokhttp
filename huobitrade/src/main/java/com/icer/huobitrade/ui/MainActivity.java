@@ -1,11 +1,13 @@
-package com.icer.huobitrade;
+package com.icer.huobitrade.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.icer.huobitrade.R;
+import com.icer.huobitrade.http.API;
 import com.icer.huobitrade.http.AppRequestBuilder;
+import com.icer.huobitrade.http.resp.BaseResp;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
 
@@ -18,12 +20,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.tv);
-        HttpMgr.post(new AppRequestBuilder(Constants.PATH_TRADE,API.COMMON_CURRENCYS)
-                .callback(new Request.StringCallBack() {
+        HttpMgr.get(new AppRequestBuilder(true, API.M_K_LINE)
+                .callback(new Request.EntityCallback<BaseResp>(BaseResp.class) {
                     @Override
-                    public void onOk(String content) {
-                        super.onOk(content);
-                        Log.i("K_LINE",content);
+                    public void onEntity(BaseResp entity) {
+                        if(entity.isOk()){
+
+                        }
                     }
                 })
                 .build());

@@ -16,18 +16,37 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncodeUtil {
 
-    public static String HMACSHA256(byte[] data, byte[] key) {
+    public static byte[] HMACSHA256(String data, String key) {
         try {
-            SecretKeySpec signingKey = new SecretKeySpec(key, "HmacSHA256");
+            SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(signingKey);
-            return byte2hex(mac.doFinal(data));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
+            return mac.doFinal(data.getBytes());
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String HMACSHA256ThenBase64String(String data, String key) {
+        try {
+            SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(signingKey);
+            return base64(mac.doFinal(data.getBytes()));
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String base64(byte[] data) {
+        try {
+            return new String(Base64.encode(data, Base64.DEFAULT), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static String byte2hex(byte[] b) {
@@ -39,23 +58,17 @@ public class EncodeUtil {
                 hs.append('0');
             hs.append(stmp);
         }
-        return hs.toString().toUpperCase();
+        return hs.toString();
     }
 
-    public static String base64Encoder(String str) {
-        String base64 = Base64.encodeToString(str.getBytes(), Base64.DEFAULT);
-        return base64;
-    }
-
-    public static String uriEncode(String str) {
+    public static String urlEncode(String str) {
         String code = null;
         try {
-            code = URLEncoder.encode(str, "UTF-8");
+            code = URLEncoder.encode(str, "UTF-8").replaceAll("\\+", "%20");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return code;
     }
-
 
 }
