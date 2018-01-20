@@ -9,8 +9,10 @@ import java.util.Map;
  */
 public class Request {
 
+    public static final String METHOD_GET = "GET";
+    public static final String METHOD_POST = "POST";
+
     private boolean mFormData;
-    @Deprecated
     private String mMethod;
     private String mUrl;
     private Map<String, String> mHeader;
@@ -31,13 +33,16 @@ public class Request {
         return mFormData;
     }
 
-    @Deprecated
     public String getMethod() {
         return mMethod;
     }
 
     public String getUrl() {
         return mUrl;
+    }
+
+    public void updateUrl(String url) {
+        mUrl = url;
     }
 
     public Map<String, String> getHeader() {
@@ -78,7 +83,7 @@ public class Request {
     public String toString() {
         return "Request{" +
                 "FormData=" + mFormData +
-//                ", Method='" + mMethod + '\'' +
+                ", Method='" + mMethod + '\'' +
                 ", Url='" + mUrl + '\'' +
                 ", Header=" + mHeader +
                 ", Body=" + mBody +
@@ -138,8 +143,7 @@ public class Request {
 
     public static class Builder {
         private boolean formData;
-        @Deprecated
-        private String method = "GET";
+        private String method = METHOD_GET;
         private String url = "";
         private Map<String, String> header = new HashMap<>();
         private Map<String, Object> body = new HashMap<>();

@@ -39,7 +39,11 @@ public interface API {
 
     /***********************************************TRADE************************************************/
 
+    String V_COMMON_SYMBOLS = "/common/symbols";
     String V_COMMON_CURRENCYS = "/common/currencys";
     String V_COMMON_TIMESTAMP = "/common/timestamp";
-    String V_ORDER_ORDERS = "/order/orders";
+
+    String V_ACCOUNT_ACCOUNTS = "/account/accounts";
+    String V_ACCOUNT_BALACNE = "/account/accounts/%s/balance";
+
 }

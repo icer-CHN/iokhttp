@@ -64,7 +64,7 @@ public class EncodeUtil {
     public static String urlEncode(String str) {
         String code = null;
         try {
-            code = URLEncoder.encode(str, "UTF-8").replaceAll("\\+", "%20");
+            code = URLEncoder.encode(str, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

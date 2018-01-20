@@ -39,4 +39,12 @@ public class HttpMgr {
     public static void cancelAll() {
         getHttpMgr().cancelAll();
     }
+
+    public static void request(Request request) {
+        if (Request.METHOD_GET.equalsIgnoreCase(request.getMethod())) {
+            get(request);
+        } else if (Request.METHOD_POST.equalsIgnoreCase(request.getMethod())) {
+            post(request);
+        }
+    }
 }
