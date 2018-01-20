@@ -1,1 +1,1 @@
-include ':iokhttplib'
+include ':iokhttplib', ':iocoin', ':huobitrade'
