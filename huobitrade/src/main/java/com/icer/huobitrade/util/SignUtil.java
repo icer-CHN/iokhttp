@@ -6,11 +6,9 @@ import com.icer.huobitrade.app.Constants;
 import com.icer.huobitrade.http.AppRequestBuilder;
 import com.icer.iokhttplib.Request;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by cljlo on 2018/1/20.
@@ -23,6 +21,12 @@ public class SignUtil {
 
     public static void addSignature(Request request, boolean urlEncode) {
         Map<String, Object> params = request.getBody();
+
+        params.put(AppRequestBuilder.PARAM_ACCESS_KEY_ID, Constants.K1);
+        params.put(AppRequestBuilder.PARAM_SIGN_METHOD, "HmacSHA256");
+        params.put(AppRequestBuilder.PARAM_SIGN_VERSION, "2");
+        params.put(AppRequestBuilder.PARAM_TIMESTAMP, TimeUtil.getUTCTimestamp());
+
         String url = request.getUrl();
 
         String host = url.replace(Constants.PROTOCOL, "");
@@ -35,15 +39,8 @@ public class SignUtil {
                 .append(host.toLowerCase()).append('\n') // Host
                 .append(apiPath).append('\n'); // /path
 
-        List<Map.Entry<String, Object>> paramsList = new ArrayList<>();
-        paramsList.addAll(params.entrySet());
-        Collections.sort(paramsList, new Comparator<Map.Entry<String, Object>>() {
-            @Override
-            public int compare(Map.Entry<String, Object> o1, Map.Entry<String, Object> o2) {
-                return o1.getKey().compareTo(o2.getKey());
-            }
-        });
-        for (Map.Entry<String, Object> e : paramsList) {
+        SortedMap<String, Object> sMap = new TreeMap<>(params);
+        for (Map.Entry<String, Object> e : sMap.entrySet()) {
             if (Request.METHOD_POST.equalsIgnoreCase(request.getMethod())) {
                 switch (e.getKey()) {
                     case AppRequestBuilder.PARAM_ACCESS_KEY_ID:
@@ -56,7 +53,7 @@ public class SignUtil {
                         continue;
                 }
             }
-            sb.append(e.getKey() + "=" + EncodeUtil.urlEncode(e.getValue().toString()) + "&");
+            sb.append(e.getKey()).append("=").append(EncodeUtil.urlEncode(e.getValue().toString())).append("&");
         }
         sb.deleteCharAt(sb.length() - 1);
         String signature = sb.toString();
@@ -68,7 +65,7 @@ public class SignUtil {
             signature = EncodeUtil.urlEncode(signature);
             Log.i("Signature", signature);
         }
-        request.getBody().put("Signature", signature);
+        request.getBody().put(AppRequestBuilder.PARAM_SIGNATURE, signature);
     }
 
     /**
@@ -78,10 +75,26 @@ public class SignUtil {
      * @return 拼接好的url
      */
     public static String urlJoinParams(Request request) {
+        return urlJoinParams(request, Request.METHOD_GET);
+    }
+
+    public static String urlJoinParams(Request request, String method) {
         String url = request.getUrl() + "?";
         Map<String, Object> params = request.getBody();
         for (Map.Entry<String, Object> e : params.entrySet()) {
-//            url += e.getKey() + "=" + EncodeUtil.urlEncode(e.getValue().toString()) + "&";
+            if (Request.METHOD_POST.equalsIgnoreCase(method)) {
+                switch (e.getKey()) {
+                    case AppRequestBuilder.PARAM_ACCESS_KEY_ID:
+                    case AppRequestBuilder.PARAM_SIGN_METHOD:
+                    case AppRequestBuilder.PARAM_SIGN_VERSION:
+                    case AppRequestBuilder.PARAM_TIMESTAMP:
+                    case AppRequestBuilder.PARAM_SIGNATURE: {
+                        break;
+                    }
+                    default:
+                        continue;
+                }
+            }
             url += e.getKey() + "=" + e.getValue().toString() + "&";
         }
         url = url.substring(0, url.length() - 1);

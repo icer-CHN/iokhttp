@@ -1,7 +1,5 @@
 package com.icer.huobitrade.http;
 
-import com.icer.huobitrade.app.Constants;
-import com.icer.huobitrade.util.TimeUtil;
 import com.icer.iokhttplib.Request;
 
 /**
@@ -14,21 +12,11 @@ public class AppRequestBuilder extends Request.Builder {
     public static final String PARAM_SIGN_METHOD = "SignatureMethod";
     public static final String PARAM_SIGN_VERSION = "SignatureVersion";
     public static final String PARAM_TIMESTAMP = "Timestamp";
+    public static final String PARAM_SIGNATURE = "Signature";
 
     public AppRequestBuilder() {
-        this(false);
-    }
-
-    public AppRequestBuilder(boolean sign) {
         //添加请求头
         addHeader("Content-Type", "application/json");
         addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36");
-        //行情API之外的都要签名
-        if (sign) {
-            addBody(PARAM_ACCESS_KEY_ID, Constants.K1);
-            addBody(PARAM_SIGN_METHOD, "HmacSHA256");
-            addBody(PARAM_SIGN_VERSION, "2");
-            addBody(PARAM_TIMESTAMP, TimeUtil.getUTCTimestamp());
-        }
     }
 }

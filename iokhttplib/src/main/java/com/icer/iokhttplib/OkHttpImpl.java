@@ -129,7 +129,11 @@ public class OkHttpImpl implements IHttp {
                 REQUEST_LIST.add(request);
                 okhttp3.Request.Builder builder = new okhttp3.Request.Builder();
                 addHeaders(request, builder);
-                RequestBody rb = addPostParams(request);
+                RequestBody rb;
+                if (!request.isJsonBody())
+                    rb = addPostParams(request);
+                else
+                    rb = RequestBody.create(MediaType.parse("application/json"), mGson.toJson(request.getBody()));
                 builder.post(rb).url(request.getUrl()).tag(request.getTag());
                 okhttp3.Request okRequest = builder.build();
                 addResponseProgress(okRequest, request);

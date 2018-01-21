@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,7 +34,7 @@ public class EncodeUtil {
             SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(signingKey);
-            return base64(mac.doFinal(data.getBytes()));
+            return base64(mac.doFinal(data.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
@@ -41,12 +42,7 @@ public class EncodeUtil {
     }
 
     public static String base64(byte[] data) {
-        try {
-            return new String(Base64.encode(data, Base64.DEFAULT), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return new String(Base64.encode(data, Base64.DEFAULT), StandardCharsets.UTF_8);
     }
 
     public static String byte2hex(byte[] b) {
@@ -64,7 +60,7 @@ public class EncodeUtil {
     public static String urlEncode(String str) {
         String code = null;
         try {
-            code = URLEncoder.encode(str, "UTF-8");
+            code = URLEncoder.encode(str, StandardCharsets.UTF_8.displayName());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

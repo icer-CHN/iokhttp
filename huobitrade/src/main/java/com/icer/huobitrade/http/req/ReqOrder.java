@@ -10,7 +10,6 @@ import com.icer.huobitrade.http.resp.OrderDetailResp;
 import com.icer.huobitrade.http.resp.OrderMatchResp;
 import com.icer.huobitrade.http.resp.OrdersResp;
 import com.icer.huobitrade.http.resp.StringResp;
-import com.icer.huobitrade.util.JsonUtil;
 import com.icer.huobitrade.util.SignUtil;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
@@ -35,31 +34,37 @@ public class ReqOrder extends Req {
      * @param callback
      */
     public static void place(String accountId, String amount, String price, boolean isMargin, String symbol, OrderType type, Request.EntityCallback<StringResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .method(Request.METHOD_POST)
+                .jsonBody(true)
                 .url(v1Api(API.V_ORDER_ORDER_PLACE))
                 .addBody("account-id", accountId)
                 .addBody("amount", amount)
                 .addBody("symbol", symbol)
                 .addBody("type", type.getVal())
-                .addBody("source", isMargin ? "margin-api" : "api")
                 .callback(callback);
         if (!TextUtils.isEmpty(price) && OrderType.BUY_MARKET != type && OrderType.SELL_MARKET != type) {
             rb.addBody("price", price);
         }
+        if (isMargin) {
+            rb.addBody("source", "margin-api");
+        }
         Request req = rb.build();
         SignUtil.addSignature(req);
+        req.updateUrl(SignUtil.urlJoinParams(req, Request.METHOD_POST));
         HttpMgr.request(req);
     }
 
     public static void cancel(String orderId, Request.EntityCallback<StringResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .method(Request.METHOD_POST)
+                .jsonBody(true)
                 .url(v1Api(String.format(API.V_ORDER_CANCEL, orderId)))
                 .addBody("order-id", orderId)
                 .callback(callback);
         Request req = rb.build();
         SignUtil.addSignature(req);
+        req.updateUrl(SignUtil.urlJoinParams(req, Request.METHOD_POST));
         HttpMgr.request(req);
     }
 
@@ -68,18 +73,20 @@ public class ReqOrder extends Req {
      * @param callback
      */
     public static void cancelBatch(List<String> orderIds, Request.EntityCallback<BatchCancelResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .method(Request.METHOD_POST)
+                .jsonBody(true)
                 .url(v1Api(API.V_ORDER_BATCH_CANCEL))
-                .addBody("order-ids", JsonUtil.toJson(orderIds))
+                .addBody("order-ids", orderIds)
                 .callback(callback);
         Request req = rb.build();
         SignUtil.addSignature(req);
+        req.updateUrl(SignUtil.urlJoinParams(req, Request.METHOD_POST));
         HttpMgr.request(req);
     }
 
     public static void orderDetail(String orderId, Request.EntityCallback<OrderDetailResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .url(v1Api(String.format(API.V_ORDER_DETAIL, orderId)))
                 .callback(callback);
         Request req = rb.build();
@@ -89,7 +96,7 @@ public class ReqOrder extends Req {
     }
 
     public static void orderMatch(String orderId, Request.EntityCallback<OrderMatchResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .url(v1Api(String.format(API.V_ORDER_MATCH_RESULT, orderId)))
                 .callback(callback);
         Request req = rb.build();
@@ -103,7 +110,7 @@ public class ReqOrder extends Req {
      * @param states 查询的订单状态组合，使用','分割  pre-submitted 准备提交, submitted 已提交, partial-filled 部分成交, partial-canceled 部分成交撤销, filled 完全成交, canceled 已撤销
      */
     public static void orders(String symbol, OrderState states, Request.EntityCallback<OrdersResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .url(v1Api(API.V_ORDER_ORDERS))
                 .addBody("symbol", symbol)
                 .addBody("states", states.getVal())
@@ -120,7 +127,7 @@ public class ReqOrder extends Req {
      * @param symbol 交易对
      */
     public static void matchResults(String symbol, Request.EntityCallback<MatchsResp> callback) {
-        Request.Builder rb = new AppRequestBuilder(true)
+        Request.Builder rb = new AppRequestBuilder()
                 .url(v1Api(API.V_ORDER_MATCH_RESULTS))
                 .addBody("symbol", symbol)
                 .callback(callback);

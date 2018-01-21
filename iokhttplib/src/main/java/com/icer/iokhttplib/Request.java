@@ -13,6 +13,7 @@ public class Request {
     public static final String METHOD_POST = "POST";
 
     private boolean mFormData;
+    private boolean mJsonBody;
     private String mMethod;
     private String mUrl;
     private Map<String, String> mHeader;
@@ -31,6 +32,10 @@ public class Request {
 
     public boolean isFormData() {
         return mFormData;
+    }
+
+    public boolean isJsonBody() {
+        return mJsonBody;
     }
 
     public String getMethod() {
@@ -83,6 +88,7 @@ public class Request {
     public String toString() {
         return "Request{" +
                 "FormData=" + mFormData +
+                "JsonBody=" + mJsonBody +
                 ", Method='" + mMethod + '\'' +
                 ", Url='" + mUrl + '\'' +
                 ", Header=" + mHeader +
@@ -104,6 +110,9 @@ public class Request {
         Request request = (Request) o;
 
         if (mFormData != request.mFormData) {
+            return false;
+        }
+        if (mJsonBody != request.mJsonBody) {
             return false;
         }
         if (!mUrl.equals(request.mUrl)) {
@@ -131,6 +140,7 @@ public class Request {
     @Override
     public int hashCode() {
         int result = (mFormData ? 1 : 0);
+        result = 31 * result + (mJsonBody ? 1 : 0);
         result = 31 * result + mUrl.hashCode();
         result = 31 * result + mHeader.hashCode();
         result = 31 * result + mBody.hashCode();
@@ -143,6 +153,7 @@ public class Request {
 
     public static class Builder {
         private boolean formData;
+        private boolean jsonBody;
         private String method = METHOD_GET;
         private String url = "";
         private Map<String, String> header = new HashMap<>();
@@ -158,6 +169,11 @@ public class Request {
 
         public Builder formData(boolean formData) {
             this.formData = formData;
+            return this;
+        }
+
+        public Builder jsonBody(boolean jsonBody) {
+            this.jsonBody = jsonBody;
             return this;
         }
 
@@ -236,6 +252,7 @@ public class Request {
         public Request build() {
             Request req = new Request();
             req.mFormData = formData;
+            req.mJsonBody = jsonBody;
             req.mMethod = method;
             req.mUrl = url;
             req.mHeader = header;

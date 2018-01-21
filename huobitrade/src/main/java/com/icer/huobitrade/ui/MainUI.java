@@ -225,7 +225,7 @@ public class MainUI extends BaseUI implements View.OnClickListener {
                     return;
                 for (Account account : App.getApp().getAccount()) {
                     if (account.isMarginAccount()) {
-                        ReqOrder.place(account.getId() + "", "1", "1", false,
+                        ReqOrder.place(account.getId() + "", "1", "1", true,
                                 App.getApp().getSymbol(), ReqOrder.OrderType.BUY_LIMIT,
                                 new Request.EntityCallback<StringResp>(StringResp.class) {
                                     @Override
@@ -258,7 +258,7 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             }
             break;
             case R.id.btn_order_cancel: {
-                ReqOrder.cancel("842137371", new Request.EntityCallback<StringResp>(StringResp.class) {
+                ReqOrder.cancel("80664211", new Request.EntityCallback<StringResp>(StringResp.class) {
                     @Override
                     public void onEntity(StringResp entity) {
                         Log.i("OrderCancel", entity.toString());
@@ -268,8 +268,8 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             break;
             case R.id.btn_order_batch_cancel: {
                 List<String> ids = new ArrayList<>();
-                ids.add("842137371");
-                ids.add("842137375");
+                ids.add("80664211");
+                ids.add("80664214");
                 ReqOrder.cancelBatch(ids, new Request.EntityCallback<BatchCancelResp>(BatchCancelResp.class) {
                     @Override
                     public void onEntity(BatchCancelResp entity) {
@@ -279,7 +279,7 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             }
             break;
             case R.id.btn_order_detail: {
-                ReqOrder.orderDetail("842137371", new Request.EntityCallback<OrderDetailResp>(OrderDetailResp.class) {
+                ReqOrder.orderDetail("80664211", new Request.EntityCallback<OrderDetailResp>(OrderDetailResp.class) {
                     @Override
                     public void onEntity(OrderDetailResp entity) {
                         Log.i("OrderDetail", entity.toString());
@@ -288,7 +288,7 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             }
             break;
             case R.id.btn_order_match: {
-                ReqOrder.orderMatch("842137371", new Request.EntityCallback<OrderMatchResp>(OrderMatchResp.class) {
+                ReqOrder.orderMatch("80664211", new Request.EntityCallback<OrderMatchResp>(OrderMatchResp.class) {
                     @Override
                     public void onEntity(OrderMatchResp entity) {
                         Log.i("OrderMatch", entity.toString());

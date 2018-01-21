@@ -15,7 +15,7 @@ import com.icer.iokhttplib.Request;
 public class ReqAccount extends Req {
 
     public static void getAccounts(Request.EntityCallback<AccountsResp> callback) {
-        Request req = new AppRequestBuilder(true)
+        Request req = new AppRequestBuilder()
                 .url(v1Api(API.V_ACCOUNT_ACCOUNTS))
                 .callback(callback)
                 .build();
@@ -25,7 +25,7 @@ public class ReqAccount extends Req {
     }
 
     public static void getBalance(String accountId, Request.EntityCallback<BalanceResp> callback) {
-        Request req = new AppRequestBuilder(true)
+        Request req = new AppRequestBuilder()
                 .url(v1Api(String.format(API.V_ACCOUNT_BALANCE, accountId)))
                 .callback(callback)
                 .build();
