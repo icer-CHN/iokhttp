@@ -18,7 +18,7 @@ public abstract class BaseUI extends AppCompatActivity {
         initData();
         initView();
         initEvent();
-        doBuiness();
+        doBusiness();
     }
 
     protected abstract int bindLayout();
@@ -39,7 +39,7 @@ public abstract class BaseUI extends AppCompatActivity {
 
     }
 
-    protected void doBuiness() {
+    protected void doBusiness() {
 
     }
 }

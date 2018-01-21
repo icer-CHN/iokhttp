@@ -42,6 +42,16 @@ public class App extends Application {
         return sApp;
     }
 
+    public String getAlertOverSender() {
+        String data = SpUtil.getString(Constants.SP_KEY_ALERTOVER_SENDER, "");
+        return data;
+    }
+
+    public String getAlertOverReceiver() {
+        String data = SpUtil.getString(Constants.SP_KEY_ALERTOVER_RECEIVER, "");
+        return data;
+    }
+
     public String getAppkey() {
         String data = SpUtil.getString(Constants.SP_KEY_APPKEY, "");
         if (!TextUtils.isEmpty(data)) {
