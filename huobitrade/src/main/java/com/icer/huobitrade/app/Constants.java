@@ -22,7 +22,8 @@ public interface Constants {
     /******************************本地广播KEY******************************/
     String EXTRA_LB_STATUS = "EXTRA_LB_STATUS";//广播状态(约定为int)
     String EXTRA_LB_FLAG = "EXTRA_LB_FLAG";//广播flag（约定为boolean）
-    String EXTRA_LB_RESULT = "EXTRA_LB_RESULT";//广播结果（自定义）
+    String EXTRA_LB_DATA = "EXTRA_LB_DATA";//广播数据（自定义）
 
-    String LB_LOGIN = "LB_LOGIN";
+    String LB_LOGIN = "LB_LOGIN";//登录账户
+    String LB_NEW_TICKER = "LB_NEW_TICKER";//最新市值变动
 }

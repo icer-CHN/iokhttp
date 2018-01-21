@@ -3,19 +3,61 @@ package com.icer.huobitrade.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.icer.huobitrade.R;
 import com.icer.huobitrade.app.App;
 import com.icer.huobitrade.app.BaseUI;
 import com.icer.huobitrade.app.Constants;
+import com.icer.huobitrade.entity.Symbol;
+import com.icer.huobitrade.entity.Ticker;
+import com.icer.huobitrade.service.MarketService;
 import com.icer.huobitrade.util.ToastUtil;
 import com.icer.huobitrade.view.Input2Dialog;
 
 
 public class MainUI extends BaseUI {
+
+    EditText mEtUpAlert;
+    EditText mEtDownAlert;
+    ToggleButton mTbAlert;
+    ToggleButton mTbAutoSell;
+    ToggleButton mTbAutoBuy;
+    TextView mTvTradeRecords;
+    TextView mTvMarketInfo;
+    Button mBtnBestBuy;
+    Button mBtnBestSell;
+    TextView mTvOrderValue;
+    SeekBar mSbValue;
+
+    private Ticker mTicker;
+    private double mBorderUp = -1;
+    private double mBorderDown = -1;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        {//开始获取最新市场数据
+            Intent service = new Intent(getBaseActivity(), MarketService.class);
+            service.putExtra(Symbol.class.getSimpleName(), App.getApp().getSymbol());
+            startService(service);
+        }
+    }
+
     @Override
     protected int bindLayout() {
         return R.layout.activity_main;
@@ -29,22 +71,97 @@ public class MainUI extends BaseUI {
     @Override
     protected void initView() {
         super.initView();
-        getSupportActionBar().setTitle(App.getApp().getSymbol().getShowSymbol());
+        updateTitle("");
+        mEtDownAlert = findViewById(R.id.et_down);
+        mEtUpAlert = findViewById(R.id.et_up);
+        mTbAlert = findViewById(R.id.tb_alert);
+    }
+
+    private void updateTitle(String price) {
+        getSupportActionBar().setTitle(App.getApp().getSymbol().getShowSymbol() + (TextUtils.isEmpty(price) ? "" : ("(" + price + ")")));
     }
 
     @Override
     protected void initEvent() {
         super.initEvent();
-        registerLocalBroadcast(Constants.LB_LOGIN);
+        registerLocalBroadcast(Constants.LB_LOGIN, Constants.LB_NEW_TICKER);
+        mEtDownAlert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    mBorderDown = Double.parseDouble(s.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mBorderDown = -1;
+                } finally {
+                    Log.i("border", +mBorderDown + "");
+                }
+            }
+        });
+        mEtUpAlert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    mBorderUp = Double.parseDouble(s.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mBorderUp = -1;
+                } finally {
+                    Log.i("border", +mBorderUp + "");
+                }
+            }
+        });
+        mTbAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.getApp().shutAlert();
+            }
+        });
     }
 
     @Override
     public void handleLocalBroadcast(Context context, Intent intent) {
         super.handleLocalBroadcast(context, intent);
         String action = intent.getAction();
-        if (Constants.LB_LOGIN.equals(action)) {
-            boolean result = intent.getBooleanExtra(Constants.EXTRA_LB_FLAG, true);
-            ToastUtil.toastShort(result ? "账户成功登录" : "账户信息有误");
+        switch (action) {
+            case Constants.LB_LOGIN: {
+                boolean result = intent.getBooleanExtra(Constants.EXTRA_LB_FLAG, true);
+                ToastUtil.toastShort(result ? "账户成功登录" : "账户信息有误");
+                break;
+            }
+            case Constants.LB_NEW_TICKER: {
+                Ticker ticker = (Ticker) intent.getSerializableExtra(Constants.EXTRA_LB_DATA);
+                mTicker = ticker;
+                if (mTbAlert.isChecked()) {
+                    if (mBorderUp != -1 && ticker.getClose() > mBorderUp) {
+                        App.getApp().doBorderAlert(true);
+                    } else if (mBorderDown != -1 && ticker.getClose() < mBorderDown) {
+                        App.getApp().doBorderAlert(false);
+                    }
+                }
+                updateTitle(mTicker.getClose() + "");
+                break;
+            }
         }
     }
 

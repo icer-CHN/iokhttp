@@ -22,18 +22,22 @@
             android:text="价格变动提示"/>
 
         <EditText
+            android:id="@+id/et_up"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:hint="涨至$"
+            android:inputType="numberDecimal"
             android:maxLines="1"
             android:textSize="16sp"/>
 
         <EditText
+            android:id="@+id/et_down"
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:hint="跌至$"
+            android:inputType="numberDecimal"
             android:maxLines="1"
             android:textSize="16sp"/>
 
@@ -161,7 +165,7 @@
                 tools:text="11.23 btc"/>
 
             <SeekBar
-                android:id="@+id/sb_trade_value"
+                android:id="@+id/sb_order_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

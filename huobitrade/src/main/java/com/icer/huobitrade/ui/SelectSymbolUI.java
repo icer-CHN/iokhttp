@@ -99,8 +99,7 @@ public class SelectSymbolUI extends BaseUI {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Symbol ci = mData.get(position);
                 App.getApp().setSymbol(ci);
-                Intent i = new Intent(SelectSymbolUI.this, MainUI.class);
-                startActivity(i);
+                goNextPage();
             }
         });
     }
@@ -124,8 +123,7 @@ public class SelectSymbolUI extends BaseUI {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == 1) {
-            Intent i = new Intent(SelectSymbolUI.this, MainUI.class);
-            startActivity(i);
+            goNextPage();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -170,5 +168,10 @@ public class SelectSymbolUI extends BaseUI {
                 mSrl.setRefreshing(false);
             }
         });
+    }
+
+    private void goNextPage() {
+        Intent i = new Intent(getBaseActivity(), MainUI.class);
+        startActivity(i);
     }
 }

@@ -94,6 +94,32 @@ public class Symbol implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Symbol symbol = (Symbol) o;
+
+        if (pricePrecision != symbol.pricePrecision) return false;
+        if (amountPrecision != symbol.amountPrecision) return false;
+        if (baseCurrency != null ? !baseCurrency.equals(symbol.baseCurrency) : symbol.baseCurrency != null)
+            return false;
+        if (quoteCurrency != null ? !quoteCurrency.equals(symbol.quoteCurrency) : symbol.quoteCurrency != null)
+            return false;
+        return symbolPartition != null ? symbolPartition.equals(symbol.symbolPartition) : symbol.symbolPartition == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = baseCurrency != null ? baseCurrency.hashCode() : 0;
+        result = 31 * result + (quoteCurrency != null ? quoteCurrency.hashCode() : 0);
+        result = 31 * result + pricePrecision;
+        result = 31 * result + amountPrecision;
+        result = 31 * result + (symbolPartition != null ? symbolPartition.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Symbol{" +
                 "baseCurrency='" + baseCurrency + '\'' +

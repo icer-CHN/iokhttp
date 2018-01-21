@@ -25,6 +25,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.MainUI"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
         <activity
@@ -33,6 +34,8 @@
         <activity
             android:name=".ui.SettingUI"
             android:screenOrientation="portrait"/>
+
+        <service android:name=".service.MarketService"/>
     </application>
 
 </manifest>

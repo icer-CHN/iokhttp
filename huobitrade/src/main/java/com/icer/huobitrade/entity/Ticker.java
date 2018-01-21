@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class Ticker implements Serializable {
+public class Ticker extends KLine implements Serializable {
 
     /**
      * "id": K线id,
@@ -31,25 +31,9 @@ public class Ticker implements Serializable {
      * bid : [1884,1.6702]
      */
 
-    private long id;
     private long ts;
-    private double close;
-    private double open;
-    private double high;
-    private double low;
-    private double amount;
-    private int count;
-    private double vol;
     private List<Double> ask;
     private List<Double> bid;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public long getTs() {
         return ts;
@@ -57,62 +41,6 @@ public class Ticker implements Serializable {
 
     public void setTs(long ts) {
         this.ts = ts;
-    }
-
-    public double getClose() {
-        return close;
-    }
-
-    public void setClose(double close) {
-        this.close = close;
-    }
-
-    public double getOpen() {
-        return open;
-    }
-
-    public void setOpen(double open) {
-        this.open = open;
-    }
-
-    public double getHigh() {
-        return high;
-    }
-
-    public void setHigh(double high) {
-        this.high = high;
-    }
-
-    public double getLow() {
-        return low;
-    }
-
-    public void setLow(double low) {
-        this.low = low;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public double getVol() {
-        return vol;
-    }
-
-    public void setVol(double vol) {
-        this.vol = vol;
     }
 
     public List<Double> getAsk() {
@@ -134,17 +62,9 @@ public class Ticker implements Serializable {
     @Override
     public String toString() {
         return "Ticker{" +
-                "id=" + id +
-                ", ts=" + ts +
-                ", close=" + close +
-                ", open=" + open +
-                ", high=" + high +
-                ", low=" + low +
-                ", amount=" + amount +
-                ", count=" + count +
-                ", vol=" + vol +
+                "ts=" + ts +
                 ", ask=" + ask +
                 ", bid=" + bid +
-                '}';
+                '}' + super.toString();
     }
 }

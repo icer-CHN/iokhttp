@@ -98,9 +98,21 @@ public class KLine implements Serializable {
         this.vol = vol;
     }
 
+    public Result getResult() {
+        Result result;
+        if (close == open) {
+            result = Result.HOLD;
+        } else if (close > open) {
+            result = Result.UP;
+        } else {
+            result = Result.DOWN;
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
-        return "KLine{" +
+        return "{" +
                 "id=" + id +
                 ", amount=" + amount +
                 ", count=" + count +
@@ -110,5 +122,20 @@ public class KLine implements Serializable {
                 ", high=" + high +
                 ", vol=" + vol +
                 '}';
+    }
+
+    public enum Result {
+
+        UP(1),//涨收
+
+        HOLD(0),//平收
+
+        DOWN(-1);//跌收
+
+        int val;
+
+        Result(int val) {
+            this.val = val;
+        }
     }
 }

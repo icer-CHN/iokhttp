@@ -1,13 +1,19 @@
 package com.icer.huobitrade.app;
 
 import android.app.Application;
+import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.icer.huobitrade.R;
 import com.icer.huobitrade.entity.Account;
 import com.icer.huobitrade.entity.Symbol;
 import com.icer.huobitrade.http.req.ReqAccount;
@@ -26,7 +32,9 @@ public class App extends Application {
 
     private List<Account> mAccount = new ArrayList<>();
     private Symbol mSymbol;
-
+    private boolean mBorderAlert;
+    private MediaPlayer mMediaPlayerUp;
+    private MediaPlayer mMediaPlayerDown;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -34,6 +42,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sApp = this;
+        mMediaPlayerUp = MediaPlayer.create(this, R.raw.sound_up);
+        mMediaPlayerDown = MediaPlayer.create(this, R.raw.sound_down);
         if (!TextUtils.isEmpty(getAppkey()) && !TextUtils.isEmpty(getSecret())) {
             initAccounts();
         }
@@ -138,5 +148,53 @@ public class App extends Application {
 
     public void localBroadcast(Intent intent) {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    public void shutAlert() {
+        mBorderAlert = false;
+        vibrateCancel(this);
+    }
+
+    public void doBorderAlert(final boolean isUp) {
+        if (mBorderAlert)
+            return;
+        mBorderAlert = true;
+        new Thread() {
+            @Override
+            public void run() {
+                while (mBorderAlert) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isUp) {
+                                mMediaPlayerUp.start();
+                            } else {
+                                mMediaPlayerDown.start();
+                            }
+                        }
+                    });
+                    vibrate(getApp(), 2000);
+                    SystemClock.sleep(3000);
+                }
+            }
+        }.start();
+    }
+
+    //震动milliseconds毫秒
+    public static void vibrate(final Context context, long milliseconds) {
+        Vibrator vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(milliseconds);
+    }
+
+    //以pattern[]方式震动
+    public static void vibrate(final Context context, long[] pattern, int repeat) {
+        Vibrator vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(pattern, repeat);
+    }
+
+    //取消震动
+    public static void vibrateCancel(final Context context) {
+        Vibrator vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.cancel();
     }
 }
