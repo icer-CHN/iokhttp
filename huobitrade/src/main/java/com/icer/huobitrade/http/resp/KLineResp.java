@@ -5,10 +5,6 @@ import com.icer.huobitrade.entity.KLine;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
-
 public class KLineResp extends BaseResp implements Serializable {
     private List<KLine> data;
 

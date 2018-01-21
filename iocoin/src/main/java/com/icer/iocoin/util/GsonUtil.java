@@ -2,9 +2,6 @@ package com.icer.iocoin.util;
 
 import com.google.gson.Gson;
 
-/**
- * Created by cljlo on 2018/1/14.
- */
 
 public class GsonUtil {
     private static Gson sGson;

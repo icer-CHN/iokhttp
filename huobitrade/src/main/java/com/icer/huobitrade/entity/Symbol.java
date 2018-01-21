@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
 
 public class Symbol implements Serializable {
 
@@ -71,7 +68,29 @@ public class Symbol implements Serializable {
     }
 
     public String getSymbol() {
-        return baseCurrency + quoteCurrency;
+        String symbol = baseCurrency + quoteCurrency;
+        return symbol;
+    }
+
+    public String getShowSymbol() {
+        String symbol = baseCurrency + "/" + quoteCurrency;
+        return symbol.toUpperCase();
+    }
+
+    public String getPartition() {
+        switch (symbolPartition) {
+            case "main": {
+                return "主区";
+            }
+            case "innovation": {
+                return "创新区";
+            }
+            case "bifurcation": {
+                return "分叉区";
+            }
+            default:
+                return "";
+        }
     }
 
     @Override

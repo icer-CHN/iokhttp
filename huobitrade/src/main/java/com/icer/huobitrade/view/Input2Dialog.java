@@ -10,27 +10,30 @@ import android.widget.TextView;
 
 import com.icer.huobitrade.R;
 
-public class InputDialog extends Dialog {
+
+public class Input2Dialog extends Dialog {
 
     TextView mTvTitle;
-    EditText mEtInput;
+    EditText mEtInput1;
+    EditText mEtInput2;
     Button mBtnOk;
     Button mBtnCancel;
 
     private Callback mCallback;
 
-    public InputDialog(@NonNull Context context) {
+    public Input2Dialog(@NonNull Context context) {
         super(context, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth);
-        setContentView(R.layout.dialog_input);
+        setContentView(R.layout.dialog_input_2);
         mTvTitle = findViewById(R.id.tv_title);
-        mEtInput = findViewById(R.id.et_input);
+        mEtInput1 = findViewById(R.id.et_input_1);
+        mEtInput2 = findViewById(R.id.et_input_2);
         mBtnOk = findViewById(R.id.btn_ok);
         mBtnCancel = findViewById(R.id.btn_cancel);
         mBtnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mCallback != null) {
-                    mCallback.onOk(mEtInput.getText().toString());
+                    mCallback.onOk(mEtInput1.getText().toString(), mEtInput2.getText().toString());
                 }
                 dismiss();
             }
@@ -43,11 +46,13 @@ public class InputDialog extends Dialog {
         });
     }
 
-    public void show(String title, String hint, Callback callback) {
+    public void show(String title, String hint1, String hint2, Callback callback) {
         mTvTitle.setText(title);
-        mEtInput.setHint(hint);
+        mEtInput1.setHint(hint1);
+        mEtInput2.setHint(hint2);
         setCallback(callback);
-        mEtInput.setText("");
+        mEtInput1.setText("");
+        mEtInput2.setText("");
         super.show();
     }
 
@@ -56,6 +61,6 @@ public class InputDialog extends Dialog {
     }
 
     public interface Callback {
-        void onOk(String input);
+        void onOk(String input1, String input2);
     }
 }

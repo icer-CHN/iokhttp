@@ -3,10 +3,6 @@ package com.icer.huobitrade.http.resp;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class CurrencysResp extends BaseResp implements Serializable {
     private List<String> data;
 

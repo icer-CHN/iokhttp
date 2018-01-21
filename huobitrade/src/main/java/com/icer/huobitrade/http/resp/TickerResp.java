@@ -4,9 +4,6 @@ import com.icer.huobitrade.entity.Ticker;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class TickerResp extends BaseResp implements Serializable {
     private Ticker tick;

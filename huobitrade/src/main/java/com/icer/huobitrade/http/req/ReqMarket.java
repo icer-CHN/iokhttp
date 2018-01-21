@@ -14,9 +14,6 @@ import com.icer.huobitrade.util.SignUtil;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class ReqMarket extends Req {
 

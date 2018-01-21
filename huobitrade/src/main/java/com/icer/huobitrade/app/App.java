@@ -1,30 +1,31 @@
 package com.icer.huobitrade.app;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.icer.huobitrade.entity.Account;
+import com.icer.huobitrade.entity.Symbol;
 import com.icer.huobitrade.http.req.ReqAccount;
 import com.icer.huobitrade.http.resp.AccountsResp;
 import com.icer.huobitrade.util.EncodeUtil;
+import com.icer.huobitrade.util.JsonUtil;
 import com.icer.huobitrade.util.SpUtil;
 import com.icer.iokhttplib.Request;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class App extends Application {
     private static App sApp;
 
     private List<Account> mAccount = new ArrayList<>();
-    private String mSymbol;
+    private Symbol mSymbol;
 
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
@@ -52,12 +53,24 @@ public class App extends Application {
         return data;
     }
 
+    public void setAppKey(String data) {
+        if (!TextUtils.isEmpty(data)) {
+            SpUtil.setString(Constants.SP_KEY_APPKEY, EncodeUtil.base64(data.getBytes()));
+        }
+    }
+
     public String getAppkey() {
         String data = SpUtil.getString(Constants.SP_KEY_APPKEY, "");
         if (!TextUtils.isEmpty(data)) {
             data = EncodeUtil.decodeBase64(data);
         }
         return data;
+    }
+
+    public void setSecret(String data) {
+        if (!TextUtils.isEmpty(data)) {
+            SpUtil.setString(Constants.SP_KEY_SECRET, EncodeUtil.base64(data.getBytes()));
+        }
     }
 
     public String getSecret() {
@@ -76,12 +89,21 @@ public class App extends Application {
         mAccount = account;
     }
 
-    public String getSymbol() {
+    public Symbol getSymbol() {
+        if (mSymbol == null) {
+            String json = SpUtil.getString(Constants.SP_KEY_SYMBOL, "");
+            if (!TextUtils.isEmpty(json)) {
+                mSymbol = JsonUtil.fromJson(json, Symbol.class);
+                Log.i("symbol", "读取币种：" + mSymbol);
+            }
+        }
         return mSymbol;
     }
 
-    public void setSymbol(String symbol) {
+    public void setSymbol(Symbol symbol) {
         mSymbol = symbol;
+        SpUtil.setString(Constants.SP_KEY_SYMBOL, JsonUtil.toJson(mSymbol));
+        Log.i("symbol", "选择币种：" + symbol);
     }
 
     public void initAccounts() {
@@ -92,9 +114,12 @@ public class App extends Application {
                     @Override
                     public void onEntity(AccountsResp entity) {
                         Log.i("InitAccounts", entity.toString());
+                        Intent lb = new Intent(Constants.LB_LOGIN);
                         if (entity.isOk()) {
                             mAccount.addAll(entity.getData());
+                            lb.putExtra(Constants.EXTRA_LB_FLAG, true);
                         } else {
+                            lb.putExtra(Constants.EXTRA_LB_FLAG, false);
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -102,6 +127,7 @@ public class App extends Application {
                                 }
                             }, 1000 * 10);
                         }
+                        localBroadcast(lb);
                     }
                 });
             }
@@ -109,4 +135,8 @@ public class App extends Application {
 
     }
 
+
+    public void localBroadcast(Intent intent) {
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
 }

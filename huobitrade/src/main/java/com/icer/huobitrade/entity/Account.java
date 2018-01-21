@@ -2,10 +2,6 @@ package com.icer.huobitrade.entity;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class Account implements Serializable {
 
 

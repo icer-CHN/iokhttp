@@ -8,10 +8,6 @@ import com.icer.huobitrade.http.resp.LongResp;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
-
 public class ReqCommon extends Req {
 
     public static void getSymbols(Request.EntityCallback<SymbolsResp> callback) {

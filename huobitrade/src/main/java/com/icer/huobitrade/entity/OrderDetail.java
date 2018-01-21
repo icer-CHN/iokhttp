@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
 
 public class OrderDetail implements Serializable {
 

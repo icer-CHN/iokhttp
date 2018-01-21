@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * 批量获取最近的交易记录
- * Created by cljlo on 2018/1/20.
  */
 
 public class TradeHistoryResp extends BaseResp implements Serializable {

@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class BatchCancel implements Serializable {
 
     private List<String> success;

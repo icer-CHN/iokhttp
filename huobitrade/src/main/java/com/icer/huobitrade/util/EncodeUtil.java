@@ -11,9 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-/**
- * Created by cljlo on 2018/1/18.
- */
 
 public class EncodeUtil {
 

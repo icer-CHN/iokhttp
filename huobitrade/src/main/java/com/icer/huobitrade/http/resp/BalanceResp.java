@@ -4,10 +4,6 @@ import com.icer.huobitrade.entity.Balance;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class BalanceResp extends BaseResp implements Serializable {
     private Balance data;
 

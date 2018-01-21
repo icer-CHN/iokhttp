@@ -1,9 +1,5 @@
 package com.icer.huobitrade.http;
 
-/**
- * Created by cljlo on 2018/1/19.
- */
-
 public interface API {
 
     /**

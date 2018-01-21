@@ -11,10 +11,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
-
 public class SignUtil {
     public static void addSignature(Request request) {
         addSignature(request, false);

@@ -2,10 +2,6 @@ package com.icer.huobitrade.http.req;
 
 import com.icer.huobitrade.app.Constants;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class Req {
 
     public static String marketApi(String api) {

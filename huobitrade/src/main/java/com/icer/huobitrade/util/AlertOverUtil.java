@@ -5,10 +5,6 @@ import com.icer.huobitrade.app.Constants;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class AlertOverUtil {
 
     public static void sendAlert(String title, String content) {

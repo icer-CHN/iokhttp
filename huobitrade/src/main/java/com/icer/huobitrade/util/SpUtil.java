@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 
 import com.icer.huobitrade.app.App;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class SpUtil {
     private static SharedPreferences sSp;
 

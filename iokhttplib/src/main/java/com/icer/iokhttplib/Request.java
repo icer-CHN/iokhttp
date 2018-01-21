@@ -302,6 +302,11 @@ public class Request {
         public void onError(Request request, Exception e) {
 
         }
+
+        @Override
+        public void onFinish() {
+
+        }
     }
 
     /**
@@ -323,5 +328,7 @@ public class Request {
          * @param e       异常
          */
         void onError(Request request, Exception e);
+
+        void onFinish();
     }
 }

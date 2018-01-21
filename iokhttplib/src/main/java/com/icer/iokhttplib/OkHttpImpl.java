@@ -235,6 +235,7 @@ public class OkHttpImpl implements IHttp {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            entityCallback.onFinish();
                             entityCallback.onOk(content);
                             try {
                                 Object obj = mGson.fromJson(content, cls);
@@ -249,6 +250,7 @@ public class OkHttpImpl implements IHttp {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
+                            stringCallBack.onFinish();
                             stringCallBack.onOk(content);
                         }
                     });
@@ -267,6 +269,7 @@ public class OkHttpImpl implements IHttp {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    callback.onFinish();
                     callback.onError(request, e);
                 }
             });

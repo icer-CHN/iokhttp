@@ -4,10 +4,6 @@ import com.icer.huobitrade.entity.BatchCancel;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class BatchCancelResp extends BaseResp implements Serializable {
     private BatchCancel data;
 

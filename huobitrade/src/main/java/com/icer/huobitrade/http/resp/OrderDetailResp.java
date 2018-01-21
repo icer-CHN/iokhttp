@@ -4,9 +4,6 @@ import com.icer.huobitrade.entity.OrderDetail;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
 
 public class OrderDetailResp extends BaseResp implements Serializable {
     private OrderDetail data;

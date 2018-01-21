@@ -2,9 +2,6 @@ package com.icer.huobitrade.entity;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class KLine implements Serializable {
 

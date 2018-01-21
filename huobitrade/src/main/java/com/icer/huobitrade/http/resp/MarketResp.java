@@ -4,9 +4,6 @@ import com.icer.huobitrade.entity.Market;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class MarketResp extends BaseResp implements Serializable {
     private Market tick;

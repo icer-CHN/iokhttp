@@ -4,10 +4,6 @@ import com.icer.huobitrade.entity.Depth;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
-
 public class DepthResp extends BaseResp implements Serializable {
     private Depth tick;
 

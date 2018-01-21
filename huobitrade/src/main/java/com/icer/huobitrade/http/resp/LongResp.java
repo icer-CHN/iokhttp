@@ -2,9 +2,6 @@ package com.icer.huobitrade.http.resp;
 
 import java.io.Serializable;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
 
 public class LongResp extends BaseResp implements Serializable {
     private long data;

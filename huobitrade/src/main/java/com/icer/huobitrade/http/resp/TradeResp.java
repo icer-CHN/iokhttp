@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 /**
  * 获取 Trade Detail 数据
- * Created by cljlo on 2018/1/20.
  */
 
 public class TradeResp extends BaseResp implements Serializable {

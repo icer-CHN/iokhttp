@@ -2,9 +2,6 @@ package com.icer.huobitrade.http;
 
 import com.icer.iokhttplib.Request;
 
-/**
- * Created by cljlo on 2018/1/18.
- */
 
 public class AppRequestBuilder extends Request.Builder {
 

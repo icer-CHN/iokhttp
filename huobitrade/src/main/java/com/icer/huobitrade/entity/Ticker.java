@@ -3,9 +3,6 @@ package com.icer.huobitrade.entity;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/20.
- */
 
 public class Ticker implements Serializable {
 

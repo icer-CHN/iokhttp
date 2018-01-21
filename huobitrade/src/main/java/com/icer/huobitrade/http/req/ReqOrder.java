@@ -16,10 +16,6 @@ import com.icer.iokhttplib.Request;
 
 import java.util.List;
 
-/**
- * Created by cljlo on 2018/1/21.
- */
-
 public class ReqOrder extends Req {
 
     /**
@@ -42,12 +38,10 @@ public class ReqOrder extends Req {
                 .addBody("amount", amount)
                 .addBody("symbol", symbol)
                 .addBody("type", type.getVal())
+                .addBody("source", isMargin ? "margin-api" : "api")
                 .callback(callback);
         if (!TextUtils.isEmpty(price) && OrderType.BUY_MARKET != type && OrderType.SELL_MARKET != type) {
             rb.addBody("price", price);
-        }
-        if (isMargin) {
-            rb.addBody("source", "margin-api");
         }
         Request req = rb.build();
         SignUtil.addSignature(req);

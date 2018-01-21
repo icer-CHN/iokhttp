@@ -5,9 +5,6 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by cljlo on 2018/1/18.
- */
 
 public class TimeUtil {
 
