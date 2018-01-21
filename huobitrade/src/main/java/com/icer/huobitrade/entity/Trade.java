@@ -15,15 +15,15 @@ public class Trade implements Serializable {
      * data : [{"id":600848670,"price":7962.62,"amount":0.0122,"direction":"buy","ts":1489464451000}]
      */
 
-    private int id;
+    private long id;
     private long ts;
     private List<TradeData> data;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -161,7 +161,6 @@ public class Request {
             return this;
         }
 
-        @Deprecated
         public Builder method(String method) {
             this.method = method;
             return this;

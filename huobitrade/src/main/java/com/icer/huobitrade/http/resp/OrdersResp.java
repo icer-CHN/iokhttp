@@ -1,27 +1,28 @@
 package com.icer.huobitrade.http.resp;
 
-import com.icer.huobitrade.entity.Balance;
+import com.icer.huobitrade.entity.Order;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by cljlo on 2018/1/21.
  */
 
-public class BalanceResp extends BaseResp implements Serializable {
-    private Balance data;
+public class OrdersResp extends BaseResp implements Serializable {
+    private List<Order> data;
 
-    public Balance getData() {
+    public List<Order> getData() {
         return data;
     }
 
-    public void setData(Balance data) {
+    public void setData(List<Order> data) {
         this.data = data;
     }
 
     @Override
     public String toString() {
-        return "BalanceResp{" +
+        return "OrdersResp{" +
                 "data=" + data +
                 '}';
     }

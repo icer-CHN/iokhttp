@@ -28,7 +28,7 @@ public class KLine implements Serializable {
      * vol : 7.1031537978665E7
      */
 
-    private int id;
+    private long id;
     private double amount;
     private int count;
     private double open;
@@ -37,11 +37,11 @@ public class KLine implements Serializable {
     private double high;
     private double vol;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

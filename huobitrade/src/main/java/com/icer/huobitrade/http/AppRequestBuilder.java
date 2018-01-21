@@ -10,6 +10,11 @@ import com.icer.iokhttplib.Request;
 
 public class AppRequestBuilder extends Request.Builder {
 
+    public static final String PARAM_ACCESS_KEY_ID = "AccessKeyId";
+    public static final String PARAM_SIGN_METHOD = "SignatureMethod";
+    public static final String PARAM_SIGN_VERSION = "SignatureVersion";
+    public static final String PARAM_TIMESTAMP = "Timestamp";
+
     public AppRequestBuilder() {
         this(false);
     }
@@ -20,10 +25,10 @@ public class AppRequestBuilder extends Request.Builder {
         addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36");
         //行情API之外的都要签名
         if (sign) {
-            addBody("AccessKeyId", Constants.K1);
-            addBody("SignatureMethod", "HmacSHA256");
-            addBody("SignatureVersion", "2");
-            addBody("Timestamp", TimeUtil.getUTCTimestamp());
+            addBody(PARAM_ACCESS_KEY_ID, Constants.K1);
+            addBody(PARAM_SIGN_METHOD, "HmacSHA256");
+            addBody(PARAM_SIGN_VERSION, "2");
+            addBody(PARAM_TIMESTAMP, TimeUtil.getUTCTimestamp());
         }
     }
 }

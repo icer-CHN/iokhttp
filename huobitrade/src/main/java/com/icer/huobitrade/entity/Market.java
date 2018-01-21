@@ -26,7 +26,7 @@ public class Market implements Serializable {
     private double close;
     private double high;
     private long ts;
-    private int id;
+    private long id;
     private int count;
     private double low;
     private double vol;
@@ -71,11 +71,11 @@ public class Market implements Serializable {
         this.ts = ts;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

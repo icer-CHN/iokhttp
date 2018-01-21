@@ -40,10 +40,41 @@ public interface API {
     /***********************************************TRADE************************************************/
 
     String V_COMMON_SYMBOLS = "/common/symbols";
+    /**
+     * 目前市场支持的币种
+     */
     String V_COMMON_CURRENCYS = "/common/currencys";
     String V_COMMON_TIMESTAMP = "/common/timestamp";
 
+    /**
+     * 查询我的账号(s)
+     */
     String V_ACCOUNT_ACCOUNTS = "/account/accounts";
-    String V_ACCOUNT_BALACNE = "/account/accounts/%s/balance";
+    /**
+     * 查询账号余额
+     */
+    String V_ACCOUNT_BALANCE = "/account/accounts/%s/balance";
 
+    /**
+     * 下单 （重要：如果使用借贷资产交易，请在下单接口/v1/order/orders/place请求参数source中填写‘margin-api’）
+     */
+    String V_ORDER_ORDER_PLACE = "/order/orders/place";
+    String V_ORDER_CANCEL = "/order/orders/%s/submitcancel";
+    /**
+     * 批量取消订单
+     */
+    String V_ORDER_BATCH_CANCEL = "/order/orders/batchcancel";
+    String V_ORDER_DETAIL = "/order/orders/%s";
+    /**
+     * 查询某个订单的成交明细
+     */
+    String V_ORDER_MATCH_RESULT = "/order/orders/%s/matchresults";
+    /**
+     * 查询当前委托、历史委托
+     */
+    String V_ORDER_ORDERS = "/order/orders";
+    /**
+     * 查询当前成交、历史成交
+     */
+    String V_ORDER_MATCH_RESULTS = "/order/matchresults";
 }

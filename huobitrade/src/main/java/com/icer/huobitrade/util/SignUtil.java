@@ -3,6 +3,7 @@ package com.icer.huobitrade.util;
 import android.util.Log;
 
 import com.icer.huobitrade.app.Constants;
+import com.icer.huobitrade.http.AppRequestBuilder;
 import com.icer.iokhttplib.Request;
 
 import java.util.ArrayList;
@@ -16,8 +17,11 @@ import java.util.Map;
  */
 
 public class SignUtil {
-
     public static void addSignature(Request request) {
+        addSignature(request, false);
+    }
+
+    public static void addSignature(Request request, boolean urlEncode) {
         Map<String, Object> params = request.getBody();
         String url = request.getUrl();
 
@@ -40,13 +44,30 @@ public class SignUtil {
             }
         });
         for (Map.Entry<String, Object> e : paramsList) {
+            if (Request.METHOD_POST.equalsIgnoreCase(request.getMethod())) {
+                switch (e.getKey()) {
+                    case AppRequestBuilder.PARAM_ACCESS_KEY_ID:
+                    case AppRequestBuilder.PARAM_SIGN_METHOD:
+                    case AppRequestBuilder.PARAM_SIGN_VERSION:
+                    case AppRequestBuilder.PARAM_TIMESTAMP: {
+                        break;
+                    }
+                    default:
+                        continue;
+                }
+            }
             sb.append(e.getKey() + "=" + EncodeUtil.urlEncode(e.getValue().toString()) + "&");
         }
         sb.deleteCharAt(sb.length() - 1);
         String signature = sb.toString();
         Log.i("Signature", signature);
-        signature = EncodeUtil.HMACSHA256ThenBase64String(signature, Constants.K2).replaceAll("\\+", "%2B");
+        signature = EncodeUtil.HMACSHA256ThenBase64String(signature, Constants.K2);
+        signature = signature.replaceAll("\\+", "%2B");
         Log.i("Signature", signature);
+        if (urlEncode) {
+            signature = EncodeUtil.urlEncode(signature);
+            Log.i("Signature", signature);
+        }
         request.getBody().put("Signature", signature);
     }
 

@@ -4,7 +4,7 @@ import com.icer.huobitrade.http.API;
 import com.icer.huobitrade.http.AppRequestBuilder;
 import com.icer.huobitrade.http.resp.CurrencysResp;
 import com.icer.huobitrade.http.resp.SymbolsResp;
-import com.icer.huobitrade.http.resp.TimeStampResp;
+import com.icer.huobitrade.http.resp.LongResp;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
 
@@ -30,7 +30,7 @@ public class ReqCommon extends Req {
         HttpMgr.request(req);
     }
 
-    public static void getTimestamp(Request.EntityCallback<TimeStampResp> callback) {
+    public static void getTimestamp(Request.EntityCallback<LongResp> callback) {
         Request req = new AppRequestBuilder()
                 .url(v1Api(API.V_COMMON_TIMESTAMP))
                 .callback(callback)

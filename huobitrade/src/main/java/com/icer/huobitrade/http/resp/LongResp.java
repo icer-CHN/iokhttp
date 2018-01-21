@@ -1,27 +1,25 @@
 package com.icer.huobitrade.http.resp;
 
-import com.icer.huobitrade.entity.Balance;
-
 import java.io.Serializable;
 
 /**
  * Created by cljlo on 2018/1/21.
  */
 
-public class BalanceResp extends BaseResp implements Serializable {
-    private Balance data;
+public class LongResp extends BaseResp implements Serializable {
+    private long data;
 
-    public Balance getData() {
+    public long getData() {
         return data;
     }
 
-    public void setData(Balance data) {
+    public void setData(long data) {
         this.data = data;
     }
 
     @Override
     public String toString() {
-        return "BalanceResp{" +
+        return "LongResp{" +
                 "data=" + data +
                 '}';
     }

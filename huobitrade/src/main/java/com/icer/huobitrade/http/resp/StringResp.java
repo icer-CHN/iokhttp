@@ -6,21 +6,21 @@ import java.io.Serializable;
  * Created by cljlo on 2018/1/21.
  */
 
-public class TimeStampResp extends BaseResp implements Serializable {
-    private long data;
+public class StringResp extends BaseResp implements Serializable {
+    private String data;
 
-    public long getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(long data) {
+    public void setData(String data) {
         this.data = data;
     }
 
     @Override
     public String toString() {
-        return "TimeStampResp{" +
-                "data=" + data +
+        return "StringResp{" +
+                "data='" + data + '\'' +
                 '}';
     }
 }

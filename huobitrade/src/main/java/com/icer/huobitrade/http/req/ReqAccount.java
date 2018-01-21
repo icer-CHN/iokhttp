@@ -26,7 +26,7 @@ public class ReqAccount extends Req {
 
     public static void getBalance(String accountId, Request.EntityCallback<BalanceResp> callback) {
         Request req = new AppRequestBuilder(true)
-                .url(v1Api(String.format(API.V_ACCOUNT_BALACNE, accountId)))
+                .url(v1Api(String.format(API.V_ACCOUNT_BALANCE, accountId)))
                 .callback(callback)
                 .build();
         SignUtil.addSignature(req);

@@ -34,7 +34,7 @@ public class Ticker implements Serializable {
      * bid : [1884,1.6702]
      */
 
-    private int id;
+    private long id;
     private long ts;
     private double close;
     private double open;
@@ -46,11 +46,11 @@ public class Ticker implements Serializable {
     private List<Double> ask;
     private List<Double> bid;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

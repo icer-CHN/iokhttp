@@ -11,15 +11,19 @@ import com.icer.huobitrade.entity.Account;
 import com.icer.huobitrade.http.req.ReqAccount;
 import com.icer.huobitrade.http.req.ReqCommon;
 import com.icer.huobitrade.http.req.ReqMarket;
-import com.icer.huobitrade.http.resp.BalanceResp;
+import com.icer.huobitrade.http.req.ReqOrder;
 import com.icer.huobitrade.http.resp.AccountsResp;
+import com.icer.huobitrade.http.resp.BalanceResp;
 import com.icer.huobitrade.http.resp.CurrencysResp;
 import com.icer.huobitrade.http.resp.DepthResp;
 import com.icer.huobitrade.http.resp.KLineResp;
+import com.icer.huobitrade.http.resp.LongResp;
 import com.icer.huobitrade.http.resp.MarketResp;
+import com.icer.huobitrade.http.resp.MatchsResp;
+import com.icer.huobitrade.http.resp.OrdersResp;
+import com.icer.huobitrade.http.resp.StringResp;
 import com.icer.huobitrade.http.resp.SymbolsResp;
 import com.icer.huobitrade.http.resp.TickerResp;
-import com.icer.huobitrade.http.resp.TimeStampResp;
 import com.icer.huobitrade.http.resp.TradeHistoryResp;
 import com.icer.huobitrade.http.resp.TradeResp;
 import com.icer.iokhttplib.Request;
@@ -39,6 +43,14 @@ public class MainUI extends BaseUI implements View.OnClickListener {
 
     Button mBtnAccounts;
     Button mBtnBalance;
+
+    Button mBtnOrderPlace;
+    Button mBtnOrders;
+    Button mBtnMatchs;
+    Button mBtnOrderCancel;
+    Button mBtnOrderBatchCancel;
+    Button mBtnOrderDetail;
+    Button mBtnOrderMatch;
 
     @Override
     protected int bindLayout() {
@@ -65,6 +77,13 @@ public class MainUI extends BaseUI implements View.OnClickListener {
         mBtnTimestamp = findViewById(R.id.btn_timestamp);
         mBtnAccounts = findViewById(R.id.btn_accounts);
         mBtnBalance = findViewById(R.id.btn_balance);
+        mBtnOrderPlace = findViewById(R.id.btn_order_place);
+        mBtnOrders = findViewById(R.id.btn_orders);
+        mBtnMatchs = findViewById(R.id.btn_matchs);
+        mBtnOrderCancel = findViewById(R.id.btn_order_cancel);
+        mBtnOrderBatchCancel = findViewById(R.id.btn_order_batch_cancel);
+        mBtnOrderDetail = findViewById(R.id.btn_order_detail);
+        mBtnOrderMatch = findViewById(R.id.btn_order_match);
     }
 
     @Override
@@ -81,6 +100,13 @@ public class MainUI extends BaseUI implements View.OnClickListener {
         mBtnTimestamp.setOnClickListener(this);
         mBtnAccounts.setOnClickListener(this);
         mBtnBalance.setOnClickListener(this);
+        mBtnOrderPlace.setOnClickListener(this);
+        mBtnOrders.setOnClickListener(this);
+        mBtnMatchs.setOnClickListener(this);
+        mBtnOrderCancel.setOnClickListener(this);
+        mBtnOrderBatchCancel.setOnClickListener(this);
+        mBtnOrderDetail.setOnClickListener(this);
+        mBtnOrderMatch.setOnClickListener(this);
     }
 
     public void onClick(View view) {
@@ -158,9 +184,9 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             }
             break;
             case R.id.btn_timestamp: {
-                ReqCommon.getTimestamp(new Request.EntityCallback<TimeStampResp>(TimeStampResp.class) {
+                ReqCommon.getTimestamp(new Request.EntityCallback<LongResp>(LongResp.class) {
                     @Override
-                    public void onEntity(TimeStampResp entity) {
+                    public void onEntity(LongResp entity) {
                         Log.i("Timestamp", entity.toString());
                     }
                 });
@@ -171,7 +197,6 @@ public class MainUI extends BaseUI implements View.OnClickListener {
                     @Override
                     public void onEntity(AccountsResp entity) {
                         Log.i("Accounts", entity.toString());
-
                     }
                 });
             }
@@ -187,6 +212,55 @@ public class MainUI extends BaseUI implements View.OnClickListener {
                         }
                     });
                 }
+            }
+            break;
+            case R.id.btn_order_place: {
+                if (App.getApp().getAccount().size() == 0)
+                    return;
+                for (Account account : App.getApp().getAccount()) {
+                    if (account.isMarginAccount()) {
+                        ReqOrder.bidOrder(account.getId() + "", "1", "1", false,
+                                App.getApp().getSymbol(), ReqOrder.OrderType.BUY_LIMIT,
+                                new Request.EntityCallback<StringResp>(StringResp.class) {
+                                    @Override
+                                    public void onEntity(StringResp entity) {
+                                        Log.i("Order", entity.toString());
+                                    }
+                                });
+                    }
+                }
+            }
+            break;
+            case R.id.btn_orders: {
+                ReqOrder.orders(App.getApp().getSymbol(), ReqOrder.OrderState.FILLED,
+                        new Request.EntityCallback<OrdersResp>(OrdersResp.class) {
+                            @Override
+                            public void onEntity(OrdersResp entity) {
+                                Log.i("Orders", entity.toString());
+                            }
+                        });
+            }
+            break;
+            case R.id.btn_matchs: {
+                ReqOrder.matchResults(App.getApp().getSymbol(),
+                        new Request.EntityCallback<MatchsResp>(MatchsResp.class) {
+                            @Override
+                            public void onEntity(MatchsResp entity) {
+                                Log.i("Matchs", entity.toString());
+                            }
+                        });
+            }
+            break;
+            case R.id.btn_order_cancel: {
+            }
+            break;
+            case R.id.btn_order_batch_cancel: {
+            }
+            break;
+            case R.id.btn_order_detail: {
+            }
+            break;
+            case R.id.btn_order_match: {
             }
             break;
         }
