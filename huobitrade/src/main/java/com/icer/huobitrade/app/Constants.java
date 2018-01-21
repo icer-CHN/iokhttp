@@ -5,8 +5,10 @@ package com.icer.huobitrade.app;
  */
 
 public interface Constants {
-    String K1 = AppConfig.APPKEY;
-    String K2 = AppConfig.SECRET;
+
+    String SP_KEY_APPKEY = "APPKEY";
+    String SP_KEY_SECRET = "SECRET";
+
     String PROTOCOL = "https://";
     String URL = "api.huobi.pro";
     String PATH_MARKET = "/market";

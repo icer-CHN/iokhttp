@@ -35,14 +35,18 @@ public class EncodeUtil {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(signingKey);
             return base64(mac.doFinal(data.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     public static String base64(byte[] data) {
         return new String(Base64.encode(data, Base64.DEFAULT), StandardCharsets.UTF_8);
+    }
+
+    public static String decodeBase64(String data) {
+        return new String(Base64.decode(data, Base64.DEFAULT), StandardCharsets.UTF_8);
     }
 
     public static String byte2hex(byte[] b) {

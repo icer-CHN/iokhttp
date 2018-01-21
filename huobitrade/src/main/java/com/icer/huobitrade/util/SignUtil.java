@@ -2,6 +2,7 @@ package com.icer.huobitrade.util;
 
 import android.util.Log;
 
+import com.icer.huobitrade.app.App;
 import com.icer.huobitrade.app.Constants;
 import com.icer.huobitrade.http.AppRequestBuilder;
 import com.icer.iokhttplib.Request;
@@ -22,7 +23,7 @@ public class SignUtil {
     public static void addSignature(Request request, boolean urlEncode) {
         Map<String, Object> params = request.getBody();
 
-        params.put(AppRequestBuilder.PARAM_ACCESS_KEY_ID, Constants.K1);
+        params.put(AppRequestBuilder.PARAM_ACCESS_KEY_ID, App.getApp().getAppkey());
         params.put(AppRequestBuilder.PARAM_SIGN_METHOD, "HmacSHA256");
         params.put(AppRequestBuilder.PARAM_SIGN_VERSION, "2");
         params.put(AppRequestBuilder.PARAM_TIMESTAMP, TimeUtil.getUTCTimestamp());
@@ -58,7 +59,7 @@ public class SignUtil {
         sb.deleteCharAt(sb.length() - 1);
         String signature = sb.toString();
         Log.i("Signature", signature);
-        signature = EncodeUtil.HMACSHA256ThenBase64String(signature, Constants.K2);
+        signature = EncodeUtil.HMACSHA256ThenBase64String(signature, App.getApp().getSecret());
         signature = signature.replaceAll("\\+", "%2B");
         Log.i("Signature", signature);
         if (urlEncode) {

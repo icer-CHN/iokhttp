@@ -3,11 +3,14 @@ package com.icer.huobitrade.app;
 import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.icer.huobitrade.entity.Account;
 import com.icer.huobitrade.http.req.ReqAccount;
 import com.icer.huobitrade.http.resp.AccountsResp;
+import com.icer.huobitrade.util.EncodeUtil;
+import com.icer.huobitrade.util.SpUtil;
 import com.icer.iokhttplib.Request;
 
 import java.util.ArrayList;
@@ -30,11 +33,29 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sApp = this;
-        initAccounts();
+        if (!TextUtils.isEmpty(getAppkey()) && !TextUtils.isEmpty(getSecret())) {
+            initAccounts();
+        }
     }
 
     public static App getApp() {
         return sApp;
+    }
+
+    public String getAppkey() {
+        String data = SpUtil.getString(Constants.SP_KEY_APPKEY, "");
+        if (!TextUtils.isEmpty(data)) {
+            data = EncodeUtil.decodeBase64(data);
+        }
+        return data;
+    }
+
+    public String getSecret() {
+        String data = SpUtil.getString(Constants.SP_KEY_SECRET, "");
+        if (!TextUtils.isEmpty(data)) {
+            data = EncodeUtil.decodeBase64(data);
+        }
+        return data;
     }
 
     public List<Account> getAccount() {

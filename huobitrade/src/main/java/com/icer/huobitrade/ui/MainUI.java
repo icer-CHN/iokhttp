@@ -1,5 +1,6 @@
 package com.icer.huobitrade.ui;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.Button;
 import com.icer.huobitrade.R;
 import com.icer.huobitrade.app.App;
 import com.icer.huobitrade.app.BaseUI;
+import com.icer.huobitrade.app.Constants;
 import com.icer.huobitrade.entity.Account;
 import com.icer.huobitrade.http.req.ReqAccount;
 import com.icer.huobitrade.http.req.ReqCommon;
@@ -29,6 +31,9 @@ import com.icer.huobitrade.http.resp.SymbolsResp;
 import com.icer.huobitrade.http.resp.TickerResp;
 import com.icer.huobitrade.http.resp.TradeHistoryResp;
 import com.icer.huobitrade.http.resp.TradeResp;
+import com.icer.huobitrade.util.EncodeUtil;
+import com.icer.huobitrade.util.SpUtil;
+import com.icer.huobitrade.view.InputDialog;
 import com.icer.iokhttplib.Request;
 
 import java.util.ArrayList;
@@ -36,6 +41,8 @@ import java.util.List;
 
 public class MainUI extends BaseUI implements View.OnClickListener {
 
+    Button mBtnSetAppkey;
+    Button mBtnSetSecret;
     Button mBtnKline;
     Button mBtnTicker;
     Button mBtnDepth;
@@ -72,6 +79,8 @@ public class MainUI extends BaseUI implements View.OnClickListener {
     @Override
     protected void initView() {
         super.initView();
+        mBtnSetAppkey = findViewById(R.id.btn_set_appkey);
+        mBtnSetSecret = findViewById(R.id.btn_set_secret);
         mBtnKline = findViewById(R.id.btn_kline);
         mBtnTicker = findViewById(R.id.btn_ticker);
         mBtnDepth = findViewById(R.id.btn_depth);
@@ -95,6 +104,8 @@ public class MainUI extends BaseUI implements View.OnClickListener {
     @Override
     protected void initEvent() {
         super.initEvent();
+        mBtnSetAppkey.setOnClickListener(this);
+        mBtnSetSecret.setOnClickListener(this);
         mBtnKline.setOnClickListener(this);
         mBtnTicker.setOnClickListener(this);
         mBtnDepth.setOnClickListener(this);
@@ -117,6 +128,32 @@ public class MainUI extends BaseUI implements View.OnClickListener {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_set_appkey: {
+                InputDialog id = new InputDialog(this);
+                id.show("设置AppKeyId", "请输入你的AppKeyId", new InputDialog.Callback() {
+
+                    @Override
+                    public void onOk(String input) {
+                        if (!TextUtils.isEmpty(input)) {
+                            SpUtil.setString(Constants.SP_KEY_APPKEY, EncodeUtil.base64(input.getBytes()));
+                        }
+                    }
+                });
+            }
+            break;
+            case R.id.btn_set_secret: {
+                InputDialog id = new InputDialog(this);
+                id.show("设置Secret", "请输入你的Secret", new InputDialog.Callback() {
+
+                    @Override
+                    public void onOk(String input) {
+                        if (!TextUtils.isEmpty(input)) {
+                            SpUtil.setString(Constants.SP_KEY_SECRET, EncodeUtil.base64(input.getBytes()));
+                        }
+                    }
+                });
+            }
+            break;
             case R.id.btn_kline: {
                 ReqMarket.getKLine(App.getApp().getSymbol(), ReqMarket.Period.MIN, 150, new Request.EntityCallback<KLineResp>(KLineResp.class) {
                     @Override
