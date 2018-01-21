@@ -4,12 +4,18 @@ import android.text.TextUtils;
 
 import com.icer.huobitrade.http.API;
 import com.icer.huobitrade.http.AppRequestBuilder;
+import com.icer.huobitrade.http.resp.BatchCancelResp;
 import com.icer.huobitrade.http.resp.MatchsResp;
+import com.icer.huobitrade.http.resp.OrderDetailResp;
+import com.icer.huobitrade.http.resp.OrderMatchResp;
 import com.icer.huobitrade.http.resp.OrdersResp;
 import com.icer.huobitrade.http.resp.StringResp;
+import com.icer.huobitrade.util.JsonUtil;
 import com.icer.huobitrade.util.SignUtil;
 import com.icer.iokhttplib.HttpMgr;
 import com.icer.iokhttplib.Request;
+
+import java.util.List;
 
 /**
  * Created by cljlo on 2018/1/21.
@@ -18,6 +24,8 @@ import com.icer.iokhttplib.Request;
 public class ReqOrder extends Req {
 
     /**
+     * 下单
+     *
      * @param accountId 账户 ID，使用accounts方法获得。币币交易使用‘spot’账户的accountid；借贷资产交易，请使用‘margin’账户的accountid
      * @param amount    限价单表示下单数量，市价买单时表示买多少钱，市价卖单时表示卖多少币
      * @param price     下单价格，市价单不传该参数
@@ -26,7 +34,7 @@ public class ReqOrder extends Req {
      * @param type      订单类型 buy-market：市价买, sell-market：市价卖, buy-limit：限价买, sell-limit：限价卖 {@link OrderType}
      * @param callback
      */
-    public static void bidOrder(String accountId, String amount, String price, boolean isMargin, String symbol, OrderType type, Request.EntityCallback<StringResp> callback) {
+    public static void place(String accountId, String amount, String price, boolean isMargin, String symbol, OrderType type, Request.EntityCallback<StringResp> callback) {
         Request.Builder rb = new AppRequestBuilder(true)
                 .method(Request.METHOD_POST)
                 .url(v1Api(API.V_ORDER_ORDER_PLACE))
@@ -44,12 +52,49 @@ public class ReqOrder extends Req {
         HttpMgr.request(req);
     }
 
-    public static void orderDetail(String orderId, Request.EntityCallback<StringResp> callback) {
+    public static void cancel(String orderId, Request.EntityCallback<StringResp> callback) {
+        Request.Builder rb = new AppRequestBuilder(true)
+                .method(Request.METHOD_POST)
+                .url(v1Api(String.format(API.V_ORDER_CANCEL, orderId)))
+                .addBody("order-id", orderId)
+                .callback(callback);
+        Request req = rb.build();
+        SignUtil.addSignature(req);
+        HttpMgr.request(req);
+    }
+
+    /**
+     * @param orderIds 单次不超过50个订单id
+     * @param callback
+     */
+    public static void cancelBatch(List<String> orderIds, Request.EntityCallback<BatchCancelResp> callback) {
+        Request.Builder rb = new AppRequestBuilder(true)
+                .method(Request.METHOD_POST)
+                .url(v1Api(API.V_ORDER_BATCH_CANCEL))
+                .addBody("order-ids", JsonUtil.toJson(orderIds))
+                .callback(callback);
+        Request req = rb.build();
+        SignUtil.addSignature(req);
+        HttpMgr.request(req);
+    }
+
+    public static void orderDetail(String orderId, Request.EntityCallback<OrderDetailResp> callback) {
         Request.Builder rb = new AppRequestBuilder(true)
                 .url(v1Api(String.format(API.V_ORDER_DETAIL, orderId)))
                 .callback(callback);
         Request req = rb.build();
         SignUtil.addSignature(req);
+        req.updateUrl(SignUtil.urlJoinParams(req));
+        HttpMgr.request(req);
+    }
+
+    public static void orderMatch(String orderId, Request.EntityCallback<OrderMatchResp> callback) {
+        Request.Builder rb = new AppRequestBuilder(true)
+                .url(v1Api(String.format(API.V_ORDER_MATCH_RESULT, orderId)))
+                .callback(callback);
+        Request req = rb.build();
+        SignUtil.addSignature(req);
+        req.updateUrl(SignUtil.urlJoinParams(req));
         HttpMgr.request(req);
     }
 

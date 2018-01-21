@@ -14,12 +14,15 @@ import com.icer.huobitrade.http.req.ReqMarket;
 import com.icer.huobitrade.http.req.ReqOrder;
 import com.icer.huobitrade.http.resp.AccountsResp;
 import com.icer.huobitrade.http.resp.BalanceResp;
+import com.icer.huobitrade.http.resp.BatchCancelResp;
 import com.icer.huobitrade.http.resp.CurrencysResp;
 import com.icer.huobitrade.http.resp.DepthResp;
 import com.icer.huobitrade.http.resp.KLineResp;
 import com.icer.huobitrade.http.resp.LongResp;
 import com.icer.huobitrade.http.resp.MarketResp;
 import com.icer.huobitrade.http.resp.MatchsResp;
+import com.icer.huobitrade.http.resp.OrderDetailResp;
+import com.icer.huobitrade.http.resp.OrderMatchResp;
 import com.icer.huobitrade.http.resp.OrdersResp;
 import com.icer.huobitrade.http.resp.StringResp;
 import com.icer.huobitrade.http.resp.SymbolsResp;
@@ -27,6 +30,9 @@ import com.icer.huobitrade.http.resp.TickerResp;
 import com.icer.huobitrade.http.resp.TradeHistoryResp;
 import com.icer.huobitrade.http.resp.TradeResp;
 import com.icer.iokhttplib.Request;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainUI extends BaseUI implements View.OnClickListener {
 
@@ -219,7 +225,7 @@ public class MainUI extends BaseUI implements View.OnClickListener {
                     return;
                 for (Account account : App.getApp().getAccount()) {
                     if (account.isMarginAccount()) {
-                        ReqOrder.bidOrder(account.getId() + "", "1", "1", false,
+                        ReqOrder.place(account.getId() + "", "1", "1", false,
                                 App.getApp().getSymbol(), ReqOrder.OrderType.BUY_LIMIT,
                                 new Request.EntityCallback<StringResp>(StringResp.class) {
                                     @Override
@@ -252,15 +258,42 @@ public class MainUI extends BaseUI implements View.OnClickListener {
             }
             break;
             case R.id.btn_order_cancel: {
+                ReqOrder.cancel("842137371", new Request.EntityCallback<StringResp>(StringResp.class) {
+                    @Override
+                    public void onEntity(StringResp entity) {
+                        Log.i("OrderCancel", entity.toString());
+                    }
+                });
             }
             break;
             case R.id.btn_order_batch_cancel: {
+                List<String> ids = new ArrayList<>();
+                ids.add("842137371");
+                ids.add("842137375");
+                ReqOrder.cancelBatch(ids, new Request.EntityCallback<BatchCancelResp>(BatchCancelResp.class) {
+                    @Override
+                    public void onEntity(BatchCancelResp entity) {
+                        Log.i("BatchCancel", entity.toString());
+                    }
+                });
             }
             break;
             case R.id.btn_order_detail: {
+                ReqOrder.orderDetail("842137371", new Request.EntityCallback<OrderDetailResp>(OrderDetailResp.class) {
+                    @Override
+                    public void onEntity(OrderDetailResp entity) {
+                        Log.i("OrderDetail", entity.toString());
+                    }
+                });
             }
             break;
             case R.id.btn_order_match: {
+                ReqOrder.orderMatch("842137371", new Request.EntityCallback<OrderMatchResp>(OrderMatchResp.class) {
+                    @Override
+                    public void onEntity(OrderMatchResp entity) {
+                        Log.i("OrderMatch", entity.toString());
+                    }
+                });
             }
             break;
         }
