@@ -23,8 +23,8 @@ import com.icer.huobitrade.R;
 import com.icer.huobitrade.app.App;
 import com.icer.huobitrade.app.BaseUI;
 import com.icer.huobitrade.app.Constants;
+import com.icer.huobitrade.entity.KLine;
 import com.icer.huobitrade.entity.Symbol;
-import com.icer.huobitrade.entity.Ticker;
 import com.icer.huobitrade.service.MarketService;
 import com.icer.huobitrade.util.SpUtil;
 import com.icer.huobitrade.util.ToastUtil;
@@ -45,7 +45,7 @@ public class MainUI extends BaseUI {
     TextView mTvOrderValue;
     SeekBar mSbValue;
 
-    private Ticker mTicker;
+    private KLine mTicker;
     private float mBorderUp = -1;
     private float mBorderDown = -1;
 
@@ -165,7 +165,11 @@ public class MainUI extends BaseUI {
                 break;
             }
             case Constants.LB_NEW_TICKER: {
-                Ticker ticker = (Ticker) intent.getSerializableExtra(Constants.EXTRA_LB_DATA);
+                if (isFinishing() || isDestroyed()) {
+                    App.getApp().shutAlert();
+                    return;
+                }
+                KLine ticker = (KLine) intent.getSerializableExtra(Constants.EXTRA_LB_DATA);
                 mTicker = ticker;
                 if (mTbAlert.isChecked()) {
                     if (mBorderUp != -1 && ticker.getClose() > mBorderUp) {
@@ -188,10 +192,11 @@ public class MainUI extends BaseUI {
     public void onBackPressed() {
         new AlertDialog.Builder(getBaseActivity())
                 .setTitle("返回")
-                .setMessage("真的要离开么？")
+                .setMessage("真的要返回么？离开此界面将不会收到价格变动提示等福利哦。")
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(getBaseContext(), SelectSymbolUI.class));
                         MainUI.super.onBackPressed();
                         mTbAlert.setChecked(false);
                     }

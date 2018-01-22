@@ -173,5 +173,6 @@ public class SelectSymbolUI extends BaseUI {
     private void goNextPage() {
         Intent i = new Intent(getBaseActivity(), MainUI.class);
         startActivity(i);
+        finish();
     }
 }

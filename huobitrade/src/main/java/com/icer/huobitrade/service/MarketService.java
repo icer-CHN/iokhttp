@@ -15,10 +15,10 @@ import android.util.Log;
 
 import com.icer.huobitrade.R;
 import com.icer.huobitrade.app.Constants;
+import com.icer.huobitrade.entity.KLine;
 import com.icer.huobitrade.entity.Symbol;
-import com.icer.huobitrade.entity.Ticker;
 import com.icer.huobitrade.http.req.ReqMarket;
-import com.icer.huobitrade.http.resp.TickerResp;
+import com.icer.huobitrade.http.resp.KLineResp;
 import com.icer.huobitrade.ui.MainUI;
 import com.icer.iokhttplib.Request;
 
@@ -57,52 +57,52 @@ public class MarketService extends Service {
                 mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
             }
             mSymbol = symbol;
-            mInTask = true;
-            new Thread() {
-                @Override
-                public void run() {
-                    while (mInTask) {
-                        SystemClock.sleep(200);
-                        ReqMarket.getTickerDetail(mSymbol.getSymbol(), new Request.EntityCallback<TickerResp>(TickerResp.class) {
-                            @Override
-                            public void onEntity(final TickerResp entity) {
-                                if (entity.isOk()) {
-                                    Intent i = new Intent(Constants.LB_NEW_TICKER);
-                                    i.putExtra(Constants.EXTRA_LB_DATA, entity.getTick());
-                                    mLocalBroadcastManager.sendBroadcast(i);
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            updateNotification(entity.getTick());
-                                        }
-                                    });
+            if (!mInTask) {
+                mInTask = true;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        while (mInTask) {
+                            SystemClock.sleep(200);
+                            ReqMarket.getKLine(mSymbol.getSymbol(), ReqMarket.Period.MIN, 1, new Request.EntityCallback<KLineResp>(KLineResp.class) {
+                                @Override
+                                public void onEntity(final KLineResp entity) {
+                                    if (entity.isOk()) {
+                                        Intent i = new Intent(Constants.LB_NEW_TICKER);
+                                        i.putExtra(Constants.EXTRA_LB_DATA, entity.getData().get(0));
+                                        mLocalBroadcastManager.sendBroadcast(i);
+                                        mHandler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateNotification(entity.getData().get(0));
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            }.start();
-
+                }.start();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
 
     private NotificationManager mNotificationManager;
 
-    private void updateNotification(Ticker ticker) {
+    private void updateNotification(KLine ticker) {
         if (mNotificationManager == null) {
             mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
         Notification.Builder builder = new Notification.Builder(this);
         Intent intent = new Intent(this, MainUI.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        String text = ticker.getResultDesc() + "\t\t" + ticker.getChangeDecimal();
+        String text = "    1min    " + ticker.getResultDesc() + "    " + ticker.getChangeDecimal();
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pi)
                 .setAutoCancel(false)
                 .setContentTitle(mSymbol.getShowSymbol().toUpperCase())
-                .setContentText(ticker.getClose() + "")
-                .setSubText(text)
+                .setContentText(ticker.getClose() + text)
                 .setOngoing(true);
         startForeground(120, builder.build());
     }

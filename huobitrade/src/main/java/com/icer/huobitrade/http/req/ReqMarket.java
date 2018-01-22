@@ -27,7 +27,7 @@ public class ReqMarket extends Req {
                 .url(marketApi(API.M_K_LINE))
                 .addBody("symbol", symbol)
                 .addBody("period", period.getVal())
-                .addBody("size", size == null ? 150 : size)
+                .addBody("size", size == null ? 1 : size)
                 .callback(callback)
                 .build();
         req.updateUrl(SignUtil.urlJoinParams(req));
