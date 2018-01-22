@@ -3,13 +3,6 @@ package com.icer.huobitrade.app;
 
 public interface Constants {
 
-    String SP_KEY_SYMBOL = "SYMBOL";
-    String SP_KEY_ACCOUNT = "ACCOUNT";
-    String SP_KEY_APPKEY = "APPKEY";
-    String SP_KEY_SECRET = "SECRET";
-    String SP_KEY_ALERTOVER_SENDER = "ALERTOVER_SENDER";
-    String SP_KEY_ALERTOVER_RECEIVER = "ALERTOVER_RECEIVER";
-
     String PROTOCOL = "https://";
     String URL = "api.huobi.pro";
     String PATH_MARKET = "/market";
@@ -17,6 +10,20 @@ public interface Constants {
 
 
     String URL_ALERT_OVER = "https://api.alertover.com/v1/alert";
+
+    /******************************配置KEY******************************/
+
+    String SP_KEY_SYMBOL = "SYMBOL";
+    String SP_KEY_ACCOUNT = "ACCOUNT";
+    String SP_KEY_APPKEY = "APPKEY";
+    String SP_KEY_SECRET = "SECRET";
+    String SP_FLAG_BORDER_ALERT = "BORDER_ALERT";
+    String SP_KEY_BORDER_UP = "BORDER_UP";
+    String SP_KEY_BORDER_DOWN = "BORDER_DOWN";
+
+
+    String SP_KEY_ALERTOVER_SENDER = "ALERTOVER_SENDER";
+    String SP_KEY_ALERTOVER_RECEIVER = "ALERTOVER_RECEIVER";
 
 
     /******************************本地广播KEY******************************/

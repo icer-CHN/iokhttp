@@ -24,7 +24,7 @@ public class SpUtil {
         sSp.edit().putInt(key, value).apply();
     }
 
-    public static int getLong(String key, int defValue) {
+    public static int getInt(String key, int defValue) {
         return sSp.getInt(key, defValue);
     }
 

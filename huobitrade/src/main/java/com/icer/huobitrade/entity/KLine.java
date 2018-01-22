@@ -107,7 +107,27 @@ public class KLine implements Serializable {
         } else {
             result = Result.DOWN;
         }
+        if (close == high) {
+            result = Result.HIGH;
+        }
+        if (close == low) {
+            result = Result.LOW;
+        }
         return result;
+    }
+
+    public String getResultDesc() {
+        return getResult().desc;
+    }
+
+    public double getChangeValue() {
+        return close - open;
+    }
+
+    public double getChangeDecimal() {
+        double d = getChangeValue() / open;
+        String ds = String.format("%.4f", d);
+        return Double.valueOf(ds);
     }
 
     @Override
@@ -125,17 +145,18 @@ public class KLine implements Serializable {
     }
 
     public enum Result {
-
-        UP(1),//涨收
-
-        HOLD(0),//平收
-
-        DOWN(-1);//跌收
+        HIGH(2, "新高"),
+        UP(1, "上涨"),
+        HOLD(0, "持平"),
+        DOWN(-1, "下跌"),
+        LOW(-2, "新低");
 
         int val;
+        String desc;
 
-        Result(int val) {
+        Result(int val, String desc) {
             this.val = val;
+            this.desc = desc;
         }
     }
 }

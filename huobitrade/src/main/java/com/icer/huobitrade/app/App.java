@@ -151,8 +151,10 @@ public class App extends Application {
     }
 
     public void shutAlert() {
-        mBorderAlert = false;
-        vibrateCancel(this);
+        if (mBorderAlert) {
+            mBorderAlert = false;
+            vibrateCancel(this);
+        }
     }
 
     public void doBorderAlert(final boolean isUp) {
@@ -173,7 +175,7 @@ public class App extends Application {
                             }
                         }
                     });
-                    vibrate(getApp(), 2000);
+                    vibrate(getApp(), isUp ? 750 : 1500);
                     SystemClock.sleep(3000);
                 }
             }

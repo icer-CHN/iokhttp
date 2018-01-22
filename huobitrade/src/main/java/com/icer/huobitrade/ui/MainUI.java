@@ -26,6 +26,7 @@ import com.icer.huobitrade.app.Constants;
 import com.icer.huobitrade.entity.Symbol;
 import com.icer.huobitrade.entity.Ticker;
 import com.icer.huobitrade.service.MarketService;
+import com.icer.huobitrade.util.SpUtil;
 import com.icer.huobitrade.util.ToastUtil;
 import com.icer.huobitrade.view.Input2Dialog;
 
@@ -45,8 +46,8 @@ public class MainUI extends BaseUI {
     SeekBar mSbValue;
 
     private Ticker mTicker;
-    private double mBorderUp = -1;
-    private double mBorderDown = -1;
+    private float mBorderUp = -1;
+    private float mBorderDown = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class MainUI extends BaseUI {
     @Override
     protected void initData() {
         super.initData();
+        mBorderDown = SpUtil.getFloat(Constants.SP_KEY_BORDER_DOWN, -1);
+        mBorderUp = SpUtil.getFloat(Constants.SP_KEY_BORDER_UP, -1);
     }
 
     @Override
@@ -75,6 +78,15 @@ public class MainUI extends BaseUI {
         mEtDownAlert = findViewById(R.id.et_down);
         mEtUpAlert = findViewById(R.id.et_up);
         mTbAlert = findViewById(R.id.tb_alert);
+        {
+            if (mBorderUp != -1) {
+                mEtUpAlert.setText(mBorderUp + "");
+            }
+            if (mBorderDown != -1) {
+                mEtDownAlert.setText(mBorderDown + "");
+            }
+            mTbAlert.setChecked(SpUtil.getBoolean(Constants.SP_FLAG_BORDER_ALERT, false));
+        }
     }
 
     private void updateTitle(String price) {
@@ -99,7 +111,8 @@ public class MainUI extends BaseUI {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    mBorderDown = Double.parseDouble(s.toString());
+                    mBorderDown = Float.parseFloat(s.toString());
+                    SpUtil.setFloat(Constants.SP_KEY_BORDER_DOWN, mBorderDown);
                 } catch (Exception e) {
                     e.printStackTrace();
                     mBorderDown = -1;
@@ -122,7 +135,8 @@ public class MainUI extends BaseUI {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    mBorderUp = Double.parseDouble(s.toString());
+                    mBorderUp = Float.parseFloat(s.toString());
+                    SpUtil.setFloat(Constants.SP_KEY_BORDER_UP, mBorderUp);
                 } catch (Exception e) {
                     e.printStackTrace();
                     mBorderUp = -1;
@@ -134,7 +148,8 @@ public class MainUI extends BaseUI {
         mTbAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                App.getApp().shutAlert();
+                boolean checked = mTbAlert.isChecked();
+                SpUtil.setBoolean(Constants.SP_FLAG_BORDER_ALERT, checked);
             }
         });
     }
@@ -157,7 +172,11 @@ public class MainUI extends BaseUI {
                         App.getApp().doBorderAlert(true);
                     } else if (mBorderDown != -1 && ticker.getClose() < mBorderDown) {
                         App.getApp().doBorderAlert(false);
+                    } else {
+                        App.getApp().shutAlert();
                     }
+                } else {
+                    App.getApp().shutAlert();
                 }
                 updateTitle(mTicker.getClose() + "");
                 break;
@@ -174,6 +193,7 @@ public class MainUI extends BaseUI {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         MainUI.super.onBackPressed();
+                        mTbAlert.setChecked(false);
                     }
                 })
                 .setNegativeButton("取消", null)

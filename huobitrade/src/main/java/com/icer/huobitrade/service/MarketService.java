@@ -96,12 +96,13 @@ public class MarketService extends Service {
         Notification.Builder builder = new Notification.Builder(this);
         Intent intent = new Intent(this, MainUI.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        String text = ticker.getResultDesc() + "\t\t" + ticker.getChangeDecimal();
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pi)
                 .setAutoCancel(false)
                 .setContentTitle(mSymbol.getShowSymbol().toUpperCase())
                 .setContentText(ticker.getClose() + "")
-                .setSubText(ticker.getResult().name())
+                .setSubText(text)
                 .setOngoing(true);
         startForeground(120, builder.build());
     }
