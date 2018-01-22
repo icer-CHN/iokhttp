@@ -41,6 +41,10 @@ public interface API {
      */
     String V_COMMON_CURRENCYS = "/common/currencys";
     String V_COMMON_TIMESTAMP = "/common/timestamp";
+    /**
+     * 查询交易币种最大最小交易限制
+     */
+    String V_COMMON_EXCHANGE = "/common/exchange?symbol=%s";
 
     /**
      * 查询我的账号(s)
