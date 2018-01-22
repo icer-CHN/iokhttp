@@ -113,6 +113,9 @@ public class KLine implements Serializable {
         if (close == low) {
             result = Result.LOW;
         }
+        if (high == low) {
+            result = Result.HOLD;
+        }
         return result;
     }
 
