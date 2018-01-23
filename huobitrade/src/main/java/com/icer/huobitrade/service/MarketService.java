@@ -18,7 +18,7 @@ import com.icer.huobitrade.app.Constants;
 import com.icer.huobitrade.entity.KLine;
 import com.icer.huobitrade.entity.Symbol;
 import com.icer.huobitrade.http.req.ReqMarket;
-import com.icer.huobitrade.http.resp.KLineResp;
+import com.icer.huobitrade.http.resp.TickerResp;
 import com.icer.huobitrade.ui.MainUI;
 import com.icer.iokhttplib.Request;
 
@@ -64,17 +64,17 @@ public class MarketService extends Service {
                     public void run() {
                         while (mInTask) {
                             SystemClock.sleep(200);
-                            ReqMarket.getKLine(mSymbol.getSymbol(), ReqMarket.Period.MIN, 1, new Request.EntityCallback<KLineResp>(KLineResp.class) {
+                            ReqMarket.getTickerDetail(mSymbol.getSymbol(), new Request.EntityCallback<TickerResp>(TickerResp.class) {
                                 @Override
-                                public void onEntity(final KLineResp entity) {
+                                public void onEntity(final TickerResp entity) {
                                     if (entity.isOk()) {
                                         Intent i = new Intent(Constants.LB_NEW_TICKER);
-                                        i.putExtra(Constants.EXTRA_LB_DATA, entity.getData().get(0));
+                                        i.putExtra(Constants.EXTRA_LB_DATA, entity.getTick());
                                         mLocalBroadcastManager.sendBroadcast(i);
                                         mHandler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                updateNotification(entity.getData().get(0));
+                                                updateNotification(entity.getTick());
                                             }
                                         });
                                     }
@@ -97,7 +97,7 @@ public class MarketService extends Service {
         Notification.Builder builder = new Notification.Builder(this);
         Intent intent = new Intent(this, MainUI.class);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        String text = "    1min    " + ticker.getResultDesc() + "    " + ticker.getChangeDecimal();
+        String text = ticker.getChangeDecimal() + "";
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pi)
                 .setAutoCancel(false)

@@ -1,8 +1,11 @@
 package com.icer.huobitrade.entity;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.io.Serializable;
 
-
+@Entity
 public class KLine implements Serializable {
 
     /**
@@ -24,7 +27,7 @@ public class KLine implements Serializable {
      * high : 1940.0
      * vol : 7.1031537978665E7
      */
-
+    @PrimaryKey
     private long id;
     private double amount;
     private int count;
@@ -33,6 +36,8 @@ public class KLine implements Serializable {
     private double low;
     private double high;
     private double vol;
+    private String period;
+    private String symbol;
 
     public long getId() {
         return id;
@@ -98,6 +103,22 @@ public class KLine implements Serializable {
         this.vol = vol;
     }
 
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
     public Result getResult() {
         Result result;
         if (close == open) {
@@ -144,15 +165,16 @@ public class KLine implements Serializable {
                 ", low=" + low +
                 ", high=" + high +
                 ", vol=" + vol +
+                ", symbol=" + symbol +
                 '}';
     }
 
     public enum Result {
-        HIGH(2, "新高"),
+        HIGH(2, "最高"),
         UP(1, "上涨"),
         HOLD(0, "持平"),
         DOWN(-1, "下跌"),
-        LOW(-2, "新低");
+        LOW(-2, "最低");
 
         int val;
         String desc;
