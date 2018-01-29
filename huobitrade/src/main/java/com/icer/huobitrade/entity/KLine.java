@@ -1,11 +1,13 @@
 package com.icer.huobitrade.entity;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(indices = {@Index(value = {"id", "period", "symbol"}, unique = true)})
 public class KLine implements Serializable {
 
     /**
@@ -27,7 +29,9 @@ public class KLine implements Serializable {
      * high : 1940.0
      * vol : 7.1031537978665E7
      */
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "_id")
+    private long dbId;
     private long id;
     private double amount;
     private int count;
@@ -38,6 +42,14 @@ public class KLine implements Serializable {
     private double vol;
     private String period;
     private String symbol;
+
+    public long getDbId() {
+        return dbId;
+    }
+
+    public void setDbId(long dbId) {
+        this.dbId = dbId;
+    }
 
     public long getId() {
         return id;

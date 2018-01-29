@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ListViewCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +18,12 @@ import android.widget.TextView;
 import com.icer.huobitrade.R;
 import com.icer.huobitrade.app.App;
 import com.icer.huobitrade.app.BaseUI;
+import com.icer.huobitrade.db.DBMgr;
+import com.icer.huobitrade.entity.KLine;
 import com.icer.huobitrade.entity.Symbol;
 import com.icer.huobitrade.http.req.ReqCommon;
+import com.icer.huobitrade.http.req.ReqMarket;
+import com.icer.huobitrade.http.resp.KLineResp;
 import com.icer.huobitrade.http.resp.SymbolsResp;
 import com.icer.iokhttplib.Request;
 
@@ -171,6 +176,28 @@ public class SelectSymbolUI extends BaseUI {
     }
 
     private void goNextPage() {
+        Symbol symbol = App.getApp().getSymbol();
+        ReqMarket.getKLine(symbol.getSymbol(), ReqMarket.Period.MIN, 2000, new Request.EntityCallback<KLineResp>(KLineResp.class) {
+            @Override
+            public void onEntity(KLineResp entity) {
+                if (entity.isOk()) {
+                    final List<KLine> list = entity.getData();
+                    String symbol = App.getApp().getSymbol().getSymbol();
+                    for (KLine kl : list) {
+                        kl.setSymbol(symbol);
+                        kl.setPeriod(ReqMarket.Period.MIN.getVal());
+                    }
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            super.run();
+                            DBMgr.getDB().kLineDao().insertAll(list);
+                            Log.i("DB", "插入" + list.size() + "条KLine数据");
+                        }
+                    }.start();
+                }
+            }
+        });
         Intent i = new Intent(getBaseActivity(), MainUI.class);
         startActivity(i);
         finish();
